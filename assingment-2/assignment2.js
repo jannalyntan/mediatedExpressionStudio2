@@ -6,17 +6,10 @@ let grabOffsetX = 0;
 let grabOffsetY = 0;
 
 //---------------------------------------------------------
-// Moving the shape
-//---------------------------------------------------------
-//When the user starts to drag the shape, it will run the function
-document.querySelectorAll(".shape").forEach((shape) => {
-  shape.addEventListener("dragstart", dragstartHandler);
-  shape.addEventListener("dragend", dragendHandler);
-});
-
-//---------------------------------------------------------
 // Dragging functions
 //---------------------------------------------------------
+// https://www.w3schools.com/html/html5_draganddrop.asp main api for the drag and drop
+
 function dragstartHandler(e) {
   // tracking which shape the user is dragging
   activeShape = e.target;
@@ -57,11 +50,19 @@ function dragstartHandler(e) {
 
   if (grabOffsetY < 0) grabOffsetY = 0;
   if (grabOffsetY >= shapeHeight) grabOffsetY = shapeHeight - 1;
+
+  console.log("shapeWidth:", shapeWidth);
+  console.log("shapePixelWidth:", shapePixelWidth);
+  console.log("sectionWidth:", sectionWidth);
+  console.log("x:", x);
+  console.log("grabOffsetX:", grabOffsetX);
 }
 
 // End of drag event
-function dragendHandler(ev) {
-  ev.target.classList.remove("dragging");
+function dragendHandler(e) {
+  e.target.classList.remove("dragging");
+  activeShape.reset();
+
   activeShape = null;
 }
 
@@ -72,6 +73,7 @@ function dragoverHandler(ev) {
 
 function dropHandler(ev) {
   ev.preventDefault();
+  console.log(activeShape);
 
   //making the dragged shape the
   const square = ev.currentTarget;
@@ -93,7 +95,7 @@ function dropHandler(ev) {
 
   const cellsToFill = [];
 
-  // runs to see whether the square is being taken and also if it can fit into the grid.
+  // runs to see whether the square is being taken and also if it can fit into the grid. I had to ChatGPT this part as well. I was stuck for a while.
 
   //runs the loop depending on how big the height and width is
   for (let r = 0; r < shapeHeight; r++) {
@@ -105,10 +107,10 @@ function dropHandler(ev) {
         `.square[data-row="${targetRow}"][data-col="${targetCol}"]`,
       );
 
-      // outside the grid container, put back the shape
+      // outside the grid container, it will not work
       if (!targetCell) return;
 
-      // occupied by another shape, put back the shape
+      // occupied by another shape, no work
       if (
         targetCell.dataset.occupied === "true" &&
         targetCell.dataset.shapeId !== activeShape.id
@@ -116,22 +118,39 @@ function dropHandler(ev) {
         return;
       }
 
+      // Placed the targeted squares into the array
       cellsToFill.push(targetCell);
     }
   }
 
   clearShapeOccupation(activeShape.id);
 
-  // place the shape into the first cell
+  // place the shape into the first cell, making sure it is nicely placed within the square
   const firstCell = cellsToFill[0];
   firstCell.appendChild(activeShape);
+
+  // I was struggling with letting the system placing the elements wrongly as before it,
+  // hence I use Claude Ai to go back and forth to ask why is it not working and got the answer
+  // where the system was not understanding the square size.
+
+  // letting the system know how big is the square
+  const cellSize = 100;
+  const gap = 10;
+
+  // calculate total width and height the shape should cover
+  const totalWidth = shapeWidth * cellSize + (shapeWidth - 1) * gap;
+  const totalHeight = shapeHeight * cellSize + (shapeHeight - 1) * gap;
 
   activeShape.style.position = "absolute";
   activeShape.style.top = "0";
   activeShape.style.left = "0";
+  activeShape.style.width = `${totalWidth}px`;
+  activeShape.style.height = `${totalHeight}px`;
   activeShape.style.margin = "0";
-  activeShape.style.zIndex = "10";
+  activeShape.style.zIndex = "2";
+  activeShape.style.opacity = "0.95";
 
+  // This is for when I want to play the sound
   cellsToFill.forEach((cell) => {
     cell.dataset.occupied = "true";
     cell.dataset.shapeId = activeShape.id;
@@ -148,6 +167,11 @@ function clearShapeOccupation(shapeId) {
       cell.classList.remove("occupied");
     });
 }
+
+//---------------------------------------------------------
+// Moving the shape
+//---------------------------------------------------------
+//When the user starts to drag the shape, it will run the function
 
 document.querySelectorAll(".square").forEach((square) => {
   square.addEventListener("dragover", dragoverHandler);
