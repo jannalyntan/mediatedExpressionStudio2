@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment 2</title>
+
+    <link rel="stylesheet" href="../mappingDesignExperiment/reset.css" />
+    <link rel="stylesheet" href="assignment2.css" />
+
+    <script src="assignment2.js" defer></script>
+  </head>
+  <body>
+    <section class="playArea">
+      <div id="square-container">
+        <!-- using Claude Ai I wanted to figure out how should I best create this 
+         system since I had to link it up to the JS. I could have had different ID 
+         for each square but using this data I can seperate it based on row and column 
+         for more control over what I might what to do with it-->
+
+        <!-- Using chatgpt to help me write it all since it will be faster -->
+        <div id="grid-container">
+          <!-- Row 0 -->
+          <div class="square" data-row="0" data-col="0"></div>
+          <div class="square" data-row="0" data-col="1"></div>
+          <div class="square" data-row="0" data-col="2"></div>
+          <div class="square" data-row="0" data-col="3"></div>
+          <div class="square" data-row="0" data-col="4"></div>
+          <div class="square" data-row="0" data-col="5"></div>
+          <div class="square" data-row="0" data-col="6"></div>
+          <div class="square" data-row="0" data-col="7"></div>
+          <div class="square" data-row="0" data-col="8"></div>
+          <div class="square" data-row="0" data-col="9"></div>
+
+          <!-- Row 1 -->
+          <div class="square" data-row="1" data-col="0"></div>
+          <div class="square" data-row="1" data-col="1"></div>
+          <div class="square" data-row="1" data-col="2"></div>
+          <div class="square" data-row="1" data-col="3"></div>
+          <div class="square" data-row="1" data-col="4"></div>
+          <div class="square" data-row="1" data-col="5"></div>
+          <div class="square" data-row="1" data-col="6"></div>
+          <div class="square" data-row="1" data-col="7"></div>
+          <div class="square" data-row="1" data-col="8"></div>
+          <div class="square" data-row="1" data-col="9"></div>
+
+          <!-- Row 2 -->
+          <div class="square" data-row="2" data-col="0"></div>
+          <div class="square" data-row="2" data-col="1"></div>
+          <div class="square" data-row="2" data-col="2"></div>
+          <div class="square" data-row="2" data-col="3"></div>
+          <div class="square" data-row="2" data-col="4"></div>
+          <div class="square" data-row="2" data-col="5"></div>
+          <div class="square" data-row="2" data-col="6"></div>
+          <div class="square" data-row="2" data-col="7"></div>
+          <div class="square" data-row="2" data-col="8"></div>
+          <div class="square" data-row="2" data-col="9"></div>
+
+          <!-- Row 3 -->
+          <div class="square" data-row="3" data-col="0"></div>
+          <div class="square" data-row="3" data-col="1"></div>
+          <div class="square" data-row="3" data-col="2"></div>
+          <div class="square" data-row="3" data-col="3"></div>
+          <div class="square" data-row="3" data-col="4"></div>
+          <div class="square" data-row="3" data-col="5"></div>
+          <div class="square" data-row="3" data-col="6"></div>
+          <div class="square" data-row="3" data-col="7"></div>
+          <div class="square" data-row="3" data-col="8"></div>
+          <div class="square" data-row="3" data-col="9"></div>
+
+          <!-- Row 4 -->
+          <div class="square" data-row="4" data-col="0"></div>
+          <div class="square" data-row="4" data-col="1"></div>
+          <div class="square" data-row="4" data-col="2"></div>
+          <div class="square" data-row="4" data-col="3"></div>
+          <div class="square" data-row="4" data-col="4"></div>
+          <div class="square" data-row="4" data-col="5"></div>
+          <div class="square" data-row="4" data-col="6"></div>
+          <div class="square" data-row="4" data-col="7"></div>
+          <div class="square" data-row="4" data-col="8"></div>
+          <div class="square" data-row="4" data-col="9"></div>
+
+          <!-- Row 5 -->
+          <div class="square" data-row="5" data-col="0"></div>
+          <div class="square" data-row="5" data-col="1"></div>
+          <div class="square" data-row="5" data-col="2"></div>
+          <div class="square" data-row="5" data-col="3"></div>
+          <div class="square" data-row="5" data-col="4"></div>
+          <div class="square" data-row="5" data-col="5"></div>
+          <div class="square" data-row="5" data-col="6"></div>
+          <div class="square" data-row="5" data-col="7"></div>
+          <div class="square" data-row="5" data-col="8"></div>
+          <div class="square" data-row="5" data-col="9"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shape-container">
+      <div
+        class="shape"
+        id="rectangle"
+        draggable="true"
+        data-width="2"
+        data-height="1"
+        ondragstart="dragstartHandler(event)"
+      ></div>
+
+      <div
+        class="shape"
+        id="rectangle2"
+        draggable="true"
+        data-width="2"
+        data-height="1"
+        ondragstart="dragstartHandler(event)"
+      ></div>
+    </section>
+  </body>
+</html>
+
+<!-- Feature Analysis -->
