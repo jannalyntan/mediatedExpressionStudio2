@@ -5,6 +5,14 @@
   --pink: #f3828a;
   --green: #508a78;
   --off-white: #fff6e9;
+
+  --boarder-radius: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --off-white: #fff6e9;
+  }
 }
 
 body {
@@ -23,7 +31,7 @@ body {
   background-color: var(--grey-white);
   width: 65vw;
   height: 74vh;
-  border-radius: 20px;
+  border-radius: var(--boarder-radius);
 
   margin-left: 3%;
 
@@ -41,7 +49,7 @@ body {
 
 .square {
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
+  border-radius: var(--boarder-radius);
   position: relative;
 }
 
@@ -57,7 +65,7 @@ body {
   background-color: var(--grey-white);
   width: 25vw;
   height: 74vh;
-  border-radius: 20px;
+  border-radius: var(--boarder-radius);
 
   margin-left: 100px;
   display: flex;
@@ -71,22 +79,23 @@ body {
   background-color: var(--blue);
   width: 210px;
   height: 100px;
-  border-radius: 20px;
+  border-radius: var(--boarder-radius);
 }
 
 #rectangle2 {
   background-color: var(--pink);
   width: 210px;
   height: 100px;
-  border-radius: 20px;
+  border-radius: var(--boarder-radius);
 }
 
 #triangle {
-  width: 0;
-  height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 50px solid #000; /* This border creates the triangle */
+  width: 100px;
+  height: 100px;
+}
+
+path {
+  fill: var(--green);
 }
 
 .shape {

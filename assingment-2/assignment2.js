@@ -1,8 +1,9 @@
 // setting up the active shape
 let activeShape = null;
 
-// so that it knows which cell inside the shape was grabbed
-let grabOffset = 0;
+//resetting everything
+let grabOffsetX = 0;
+let grabOffsetY = 0;
 
 //---------------------------------------------------------
 // Moving the shape
@@ -26,18 +27,36 @@ function dragstartHandler(e) {
 
   // Converting the width data set number into an actual number not a string. Using || 1 as a fallback in case it doesnt work
   const shapeWidth = Number(activeShape.dataset.width) || 1;
+
   // Getting the shape px
   const shapePixelWidth = activeShape.offsetWidth;
+
   // splitting it so to know where to place the shape
   const sectionWidth = shapePixelWidth / shapeWidth;
 
-  // where inside the shape the user grabbed
+  // Converting the height data set number into an actual number not a string. Using || 1 as a fallback in case it doesnt work
+  const shapeHeight = Number(activeShape.dataset.height) || 1;
+
+  // Getting the shape px
+  const shapePixelHeight = activeShape.offsetHeight;
+
+  // splitting it so to know where to place the shape
+  const sectionHeight = shapePixelHeight / shapeHeight;
+
+  // where inside the shape the user grabbed width
   const x = e.offsetX;
-  grabOffset = Math.floor(x / sectionWidth);
+  grabOffsetX = Math.floor(x / sectionWidth);
+
+  // where inside the shape the user grabbed height
+  const y = e.offsetY; //
+  grabOffsetY = Math.floor(y / sectionHeight);
 
   // just in case, ensuring it won't work if the user clicks out of it
-  if (grabOffset < 0) grabOffset = 0;
-  if (grabOffset >= shapeWidth) grabOffset = shapeWidth - 1;
+  if (grabOffsetX < 0) grabOffsetX = 0;
+  if (grabOffsetX >= shapeWidth) grabOffsetX = shapeWidth - 1;
+
+  if (grabOffsetY < 0) grabOffsetY = 0;
+  if (grabOffsetY >= shapeHeight) grabOffsetY = shapeHeight - 1;
 }
 
 // End of drag event
@@ -54,7 +73,7 @@ function dragoverHandler(ev) {
 function dropHandler(ev) {
   ev.preventDefault();
 
-  //mkaing the dragged shape the
+  //making the dragged shape the
   const square = ev.currentTarget;
   if (!square || !activeShape) return;
 
@@ -66,31 +85,39 @@ function dropHandler(ev) {
   const shapeWidth = Number(activeShape.dataset.width) || 1;
   const shapeHeight = Number(activeShape.dataset.height) || 1;
 
-  if (shapeHeight !== 1) return;
+  // adjust start position based on which part of the shape was grabbed,
+  // via calculating square it is on minus the position grabed, so it can calculate it
+  // which squares will it occupy
+  const startCol = dropCol - grabOffsetX;
+  const startRow = dropRow - grabOffsetY;
 
-  // adjust start column based on which side was grabbed
-  const startCol = dropCol - grabOffset;
-  const startRow = dropRow - grabOffset;
+  const cellsToFill = [];
 
-  for (let c = 0; c < shapeWidth; c++) {
-    const targetCol = startCol + c;
+  // runs to see whether the square is being taken and also if it can fit into the grid.
 
-    const targetCell = document.querySelector(
-      `.square[data-row="${startRow}"][data-col="${targetCol}"]`,
-    );
+  //runs the loop depending on how big the height and width is
+  for (let r = 0; r < shapeHeight; r++) {
+    for (let c = 0; c < shapeWidth; c++) {
+      const targetRow = startRow + r;
+      const targetCol = startCol + c;
 
-    // outside grid
-    if (!targetCell) return;
+      const targetCell = document.querySelector(
+        `.square[data-row="${targetRow}"][data-col="${targetCol}"]`,
+      );
 
-    // occupied by another shape
-    if (
-      targetCell.dataset.occupied === "true" &&
-      targetCell.dataset.shapeId !== activeShape.id
-    ) {
-      return;
+      // outside the grid container, put back the shape
+      if (!targetCell) return;
+
+      // occupied by another shape, put back the shape
+      if (
+        targetCell.dataset.occupied === "true" &&
+        targetCell.dataset.shapeId !== activeShape.id
+      ) {
+        return;
+      }
+
+      cellsToFill.push(targetCell);
     }
-
-    cellsToFill.push(targetCell);
   }
 
   clearShapeOccupation(activeShape.id);
