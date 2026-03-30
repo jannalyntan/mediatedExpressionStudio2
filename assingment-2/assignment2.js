@@ -24,7 +24,7 @@ function dragstartHandler(e) {
   //This is so that the code which 'square' is using the cursor at. I had to chatgpt this as I was stuck for quite a while.
   // I tried tracking the width and height but it was just not working.
 
-  // Converting the data set number into an actual number not a string. Using || 1 as a fallback in case it doesnt work
+  // Converting the width data set number into an actual number not a string. Using || 1 as a fallback in case it doesnt work
   const shapeWidth = Number(activeShape.dataset.width) || 1;
   // Getting the shape px
   const shapePixelWidth = activeShape.offsetWidth;
@@ -46,7 +46,7 @@ function dragendHandler(ev) {
   activeShape = null;
 }
 
-//
+// Based on the API guide
 function dragoverHandler(ev) {
   ev.preventDefault();
 }
@@ -54,12 +54,15 @@ function dragoverHandler(ev) {
 function dropHandler(ev) {
   ev.preventDefault();
 
+  //mkaing the dragged shape the
   const square = ev.currentTarget;
   if (!square || !activeShape) return;
 
+  //tracking which square did the user drop the block on
   const dropRow = Number(square.dataset.row);
   const dropCol = Number(square.dataset.col);
 
+  //Tracking the number of squares the block needs
   const shapeWidth = Number(activeShape.dataset.width) || 1;
   const shapeHeight = Number(activeShape.dataset.height) || 1;
 
@@ -67,9 +70,7 @@ function dropHandler(ev) {
 
   // adjust start column based on which side was grabbed
   const startCol = dropCol - grabOffset;
-  const startRow = dropRow;
-
-  const cellsToFill = [];
+  const startRow = dropRow - grabOffset;
 
   for (let c = 0; c < shapeWidth; c++) {
     const targetCol = startCol + c;
