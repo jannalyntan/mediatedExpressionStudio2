@@ -24,6 +24,10 @@ body {
   background-color: var(--bg-dark);
 }
 
+path {
+  fill: var(--green);
+}
+
 /* ---------------------------------------- */
 /* Square Grid */
 /* ---------------------------------------- */
@@ -39,6 +43,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* Found it online to make the box more 3D */
+  box-shadow:
+    inset 0 6px 12px rgba(255, 255, 255, 0.35),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 #grid-container {
@@ -55,32 +65,44 @@ body {
 }
 
 /* ---------------------------------------- */
-/* Shapes*/
+/* Shape Container*/
 /* ---------------------------------------- */
-
+/* Found it online to make the box more 3D */
 .shape-container {
   background-color: var(--grey-white);
   width: 25vw;
   height: 74vh;
   border-radius: var(--boarder-radius);
-
   margin-left: 100px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  box-shadow:
+    inset 0 6px 12px rgba(255, 255, 255, 0.35),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.08);
 }
+.shape {
+  cursor: grab;
+  opacity: 0.95;
+  position: absolute;
+  transition: transform 0.2s ease;
+
+  filter: drop-shadow(5px 5px 5px rgba(44, 44, 44, 0.4));
+}
+
+.shape.dragging {
+  opacity: 0.7;
+  cursor: grab;
+}
+
+/* ---------------------------------------- */
+/* Shape*/
+/* ---------------------------------------- */
 
 #rectangle {
-  background-color: var(--blue);
-  width: 210px;
-  height: 100px;
-  border-radius: var(--boarder-radius);
-}
-
-#rectangle2 {
-  background-color: var(--pink);
+  background-color: var(--shape-color, var(--blue));
   width: 210px;
   height: 100px;
   border-radius: var(--boarder-radius);
@@ -92,22 +114,8 @@ body {
 }
 
 #circle {
-  background-color: var(--pink);
+  background-color: var(--shape-color, var(--blue));
   width: 100px;
   height: 100px;
   border-radius: 50px;
-}
-
-path {
-  fill: var(--green);
-}
-
-.shape {
-  cursor: grab;
-  opacity: 0.95;
-}
-
-.shape.dragging {
-  opacity: 0.7;
-  cursor: grab;
 }

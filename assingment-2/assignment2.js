@@ -149,6 +149,7 @@ function dropHandler(ev) {
   activeShape.style.margin = "0";
   activeShape.style.zIndex = "2";
   activeShape.style.opacity = "0.95";
+  activeShape.style.transform = `rotate(0)`;
 
   // This is for when I want to play the sound
   cellsToFill.forEach((cell) => {
@@ -176,4 +177,71 @@ function clearShapeOccupation(shapeId) {
 document.querySelectorAll(".square").forEach((square) => {
   square.addEventListener("dragover", dragoverHandler);
   square.addEventListener("drop", dropHandler);
+});
+
+//---------------------------------------------------------
+// Randomsie the Shape in the Shape Container
+//---------------------------------------------------------
+function randomiseShapes() {
+  const container = document.querySelector(".shape-container");
+  const shapes = document.querySelectorAll(".shape");
+
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+
+  shapes.forEach((shape) => {
+    const shapeWidth = shape.offsetWidth;
+    const shapeHeight = shape.offsetHeight;
+    const shapeZIndex = shape.zIndex;
+
+    // random position (keeps shape inside container)
+    const maxX = containerWidth - shapeWidth;
+    const maxY = containerHeight - shapeHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    // random rotation
+    const rotation = (Math.random() - 0.5) * 20;
+
+    shape.style.left = `${x}px`;
+    shape.style.top = `${y}px`;
+    shape.style.transform = `rotate(${rotation}deg)`;
+  });
+}
+
+function spawnShapes() {
+  const container = document.querySelector(".shape-container");
+  const originals = document.querySelectorAll(".shape");
+
+  const colours = [
+    "var(--blue)",
+    "var(--pink)",
+    "var(--green)",
+    "var(--yellow)",
+  ];
+
+  originals.forEach((shape) => {
+    // create multiple copies of each shape
+    const copies = Math.floor(Math.random() * 6);
+
+    for (let i = 0; i < copies; i++) {
+      const clone = shape.cloneNode(true);
+
+      // remove duplicate IDs (VERY IMPORTANT)
+      clone.removeAttribute("id");
+
+      // 🎨 assign random colour
+      const randomColour = colours[Math.floor(Math.random() * colours.length)];
+
+      clone.style.setProperty("--shape-color", randomColour);
+
+      container.appendChild(clone);
+    }
+  });
+}
+
+window.addEventListener("load", () => {
+  spawnShapes();
+  randomiseShapes();
 });
