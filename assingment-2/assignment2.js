@@ -204,6 +204,8 @@ function randomiseShapes() {
     // random rotation
     const rotation = (Math.random() - 0.5) * 20;
 
+    const zIndex = Math.floor(Math.random() * 10);
+
     shape.style.left = `${x}px`;
     shape.style.top = `${y}px`;
     shape.style.transform = `rotate(${rotation}deg)`;
