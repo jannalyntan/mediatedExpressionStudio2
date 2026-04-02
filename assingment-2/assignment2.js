@@ -6,6 +6,43 @@ let grabOffsetX = 0;
 let grabOffsetY = 0;
 
 //---------------------------------------------------------
+// Sound System
+//---------------------------------------------------------
+
+//create a synth and connect it to the main output (your speakers)
+const synth = new Tone.Synth().toDestination();
+
+const pinkSound = new Tone.PolySynth(Tone.Synth, {
+  oscillator: { type: "sine" },
+  envelope: {
+    attack: 1,
+    decay: 1,
+    sustain: 0.6,
+    release: 4,
+  },
+});
+
+const reverb = new Tone.Reverb({
+  decay: 8,
+  wet: 0.4,
+}).toDestination();
+
+synth.connect(reverb);
+
+const now = Tone.now();
+
+const colourNotes = {
+  blue: ["D4", "F4", "A4"],
+  yellow: ["G3", "B3", "D4"],
+  pink: pinkSound,
+  green: ["E3", "G3", "B3"],
+};
+
+function playSquares() {
+  synth.triggerAttackRelease(colourNotes, "8n");
+}
+
+//---------------------------------------------------------
 // Dragging functions
 //---------------------------------------------------------
 // https://www.w3schools.com/html/html5_draganddrop.asp main api for the drag and drop
