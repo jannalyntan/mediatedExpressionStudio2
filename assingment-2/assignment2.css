@@ -25,7 +25,7 @@ body {
 }
 
 path {
-  fill: var(--green);
+fill: var(--shape-color, var(--blue));
 }
 
 /* ---------------------------------------- */
@@ -102,7 +102,6 @@ path {
 /* ---------------------------------------- */
 
 #rectangle {
-  background-color: var(--shape-color, var(--blue));
   width: 210px;
   height: 100px;
   border-radius: var(--boarder-radius);
@@ -114,7 +113,6 @@ path {
 }
 
 #circle {
-  background-color: var(--shape-color, var(--blue));
   width: 100px;
   height: 100px;
   border-radius: 50px;
