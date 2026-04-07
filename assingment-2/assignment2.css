@@ -25,7 +25,7 @@ body {
 }
 
 path {
-fill: var(--shape-color, var(--blue));
+  fill: var(--shape-color, var(--blue));
 }
 
 /* ---------------------------------------- */
@@ -71,7 +71,7 @@ fill: var(--shape-color, var(--blue));
 .shape-container {
   background-color: var(--grey-white);
   width: 25vw;
-  height: 74vh;
+  height: 50vh;
   border-radius: var(--boarder-radius);
   margin-left: 100px;
 
@@ -84,6 +84,15 @@ fill: var(--shape-color, var(--blue));
     0 8px 20px rgba(0, 0, 0, 0.08);
 }
 .shape {
+  cursor: grab;
+  opacity: 0.95;
+  position: absolute;
+  transition: transform 0.2s ease;
+
+  filter: drop-shadow(5px 5px 5px rgba(44, 44, 44, 0.4));
+}
+
+.shape2 {
   cursor: grab;
   opacity: 0.95;
   position: absolute;
@@ -116,4 +125,12 @@ fill: var(--shape-color, var(--blue));
   width: 100px;
   height: 100px;
   border-radius: 50px;
+}
+
+/* hide the original shapes, they are just used as templates to clone from */
+#rectangle,
+#triangle,
+#circle,
+#bridge {
+  display: none;
 }
