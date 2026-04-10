@@ -185,5 +185,28 @@
         </svg>
       </div>
     </section>
+
+    <section class="loop-controls">
+      <button id="loop-play-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 16 16"
+        >
+          <polygon points="4,2 14,8 4,14" class="play-icon" />
+          <g class="pause-icon" style="display: none">
+            <rect x="3" y="2" width="4" height="12" />
+            <rect x="9" y="2" width="4" height="12" />
+          </g>
+        </svg>
+      </button>
+
+      <div class="loop-bpm-row">
+        <span class="loop-label">BPM</span>
+        <input type="range" id="loop-bpm" min="60" max="180" value="120" />
+        <span id="loop-bpm-val">120</span>
+      </div>
+    </section>
   </body>
 </html>

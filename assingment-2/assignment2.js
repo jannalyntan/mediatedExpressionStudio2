@@ -1,11 +1,14 @@
+// tracking the shapes
 let activeShape = null;
 let droppedOnGrid = false;
 let grabOffsetX = 0;
 let grabOffsetY = 0;
 
+// Placing the Cell size
 const CELL_SIZE = 100;
 const GAP = 10;
 
+// Css Colour Name
 const cssToColourName = {
   "var(--blue)": "blue",
   "var(--pink)": "pink",
@@ -13,10 +16,16 @@ const cssToColourName = {
   "var(--yellow)": "yellow",
 };
 
+const rowPitches = {
+  blue: ["C4", "A3", "G3", "E3", "D3", "C2"],
+  pink: ["C7", "A6", "G6", "E6", "D6", "C5"],
+  green: ["C6", "A5", "G5", "E5", "D5", "C4"],
+  yellow: ["C6", "A5", "G5", "E5", "D5", "C4"],
+};
+
 //---------------------------------------------------------
 // Audio
 //---------------------------------------------------------
-
 document.addEventListener(
   "click",
   async () => {
@@ -26,8 +35,9 @@ document.addEventListener(
 );
 
 const reverb = new Tone.Reverb({ decay: 1.5, wet: 0.15 }).toDestination();
-
-const drumSynth = new Tone.MembraneSynth({
+//After testing I realised I had to use the polysynth to get it to play together otherwise there would be an error
+//Testing this out wanted it to be a drum sound, similar to the a toy drum
+const drumSynth = new Tone.PolySynth(Tone.MembraneSynth, {
   pitchDecay: 0.02,
   octaves: 2,
   oscillator: { type: "sine" },
@@ -35,21 +45,22 @@ const drumSynth = new Tone.MembraneSynth({
   volume: -8,
 }).connect(reverb);
 
+//Wanting this to sound like a piano
 const pinkSynth = new Tone.PolySynth(Tone.Synth, {
   oscillator: { type: "triangle" },
   envelope: { attack: 0.02, decay: 0.3, sustain: 0.3, release: 0.6 },
   volume: -6,
 }).connect(reverb);
 
-const greenSynth = new Tone.MetalSynth({
-  frequency: 600,
-  envelope: { attack: 0.001, decay: 0.4, release: 0.2 },
-  harmonicity: 5,
-  modulationIndex: 32,
-  resonance: 3000,
+// I want it to sound like a triangle 'ding' sound
+const greenSynth = new Tone.PolySynth(Tone.Synth, {
+  oscillator: { type: "triangle" },
+  envelope: { attack: 0.001, decay: 0.25, sustain: 0, release: 0.2 },
+  volume: -10,
 }).connect(reverb);
 
-const yellowSynth = new Tone.FMSynth({
+//I didn't know what sound to make this sound like so I made it sound as high pitch as possible and more kid like, similar to those fake drum set
+const yellowSynth = new Tone.PolySynth(Tone.FMSynth, {
   harmonicity: 4,
   modulationIndex: 12,
   envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.1 },
@@ -58,6 +69,7 @@ const yellowSynth = new Tone.FMSynth({
   volume: -2,
 }).connect(reverb);
 
+// Recording the sound notes
 const colourPatterns = {
   blue: ["kick", "snare", "kick"],
   pink: ["C6", "E6", "G6"],
@@ -65,26 +77,59 @@ const colourPatterns = {
   yellow: ["G5", "B5", "D6"],
 };
 
-function playColourSound(colourName) {
+// Used when dropping a shape manually onto the grid
+function playColourSound(colourName, row) {
+  const note = rowPitches[colourName]?.[row];
   const now = Tone.now();
+
+  if (!note) return;
+
   if (colourName === "blue") {
-    drumSynth.triggerAttackRelease("C3", "16n", now);
-    drumSynth.triggerAttackRelease("G3", "16n", now + 0.12);
-    drumSynth.triggerAttackRelease("E3", "16n", now + 0.24);
+    drumSynth.triggerAttackRelease(note, "16n", now);
+    drumSynth.triggerAttackRelease(note, "16n", now + 0.12);
+    drumSynth.triggerAttackRelease(note, "16n", now + 0.24);
     return;
   }
-  const pattern = colourPatterns[colourName];
-  if (!pattern) return;
-  pattern.forEach((note, i) => {
-    const time = now + i * 0.12;
-    if (colourName === "pink") pinkSynth.triggerAttackRelease(note, "8n", time);
-    if (colourName === "yellow")
-      yellowSynth.triggerAttackRelease(note, "16n", time);
-    if (colourName === "green")
-      greenSynth.triggerAttackRelease("C6", "8n", time);
-  });
+
+  if (colourName === "pink") {
+    pinkSynth.triggerAttackRelease(note, "8n", now);
+    return;
+  }
+
+  if (colourName === "yellow") {
+    yellowSynth.triggerAttackRelease(note, "16n", now);
+    return;
+  }
+
+  if (colourName === "green") {
+    greenSynth.triggerAttackRelease(note, "8n", now);
+    return;
+  }
 }
 
+// Used by the looper — pitch determined by row position
+function playRowSound(colourName, row, time) {
+  const note = rowPitches[colourName][row];
+
+  if (colourName === "blue") {
+    drumSynth.triggerAttackRelease(note, "16n", time);
+    drumSynth.triggerAttackRelease(note, "16n", time + 0.12);
+    drumSynth.triggerAttackRelease(note, "16n", time + 0.24);
+    return;
+  }
+  if (colourName === "pink") {
+    pinkSynth.triggerAttackRelease(note, "8n", time);
+    return;
+  }
+  if (colourName === "yellow") {
+    yellowSynth.triggerAttackRelease(note, "16n", time);
+    return;
+  }
+  if (colourName === "green") {
+    greenSynth.triggerAttackRelease(note, "8n", time);
+    return;
+  }
+}
 //---------------------------------------------------------
 // Helpers
 //---------------------------------------------------------
@@ -274,7 +319,11 @@ function dropHandler(e) {
     cell.classList.add("occupied");
   });
 
-  playColourSound(cssToColourName[activeShape.dataset.colour]);
+  // ensure that if the loop is playing it won't double play the sound
+  if (isPlaying) {
+  } else {
+    playColourSound(cssToColourName[activeShape.dataset.colour], startRow);
+  }
 }
 
 function clearShapeOccupation(shapeId) {
@@ -304,3 +353,96 @@ window.addEventListener("load", () => {
   spawnShapes();
   randomiseShapes();
 });
+
+//---------------------------------------------------------
+// Looper
+//---------------------------------------------------------
+
+let loopSequence = null;
+let isPlaying = false;
+
+function setPlayhead(col) {
+  document.querySelectorAll(".pip").forEach((p, i) => {
+    p.classList.toggle("pip-active", i === col);
+  });
+  document.querySelectorAll(".square").forEach((cell) => {
+    cell.classList.toggle("col-active", parseInt(cell.dataset.col) === col);
+  });
+}
+
+const loopBpm = document.getElementById("loop-bpm");
+const bpmDisplay = document.getElementById("loop-bpm-val");
+
+// set initial number
+bpmDisplay.textContent = loopBpm.value;
+
+// update when slider moves
+loopBpm.addEventListener("input", () => {
+  const bpm = loopBpm.value;
+  bpmDisplay.textContent = bpm;
+});
+
+function startLoop() {
+  Tone.Transport.cancel();
+  Tone.Transport.bpm.value = parseInt(loopBpm.value);
+
+  let step = 0;
+
+  loopSequence = new Tone.Sequence(
+    (time) => {
+      const col = step % 10;
+
+      for (let row = 0; row < 6; row++) {
+        const cell = document.querySelector(
+          `.square[data-row="${row}"][data-col="${col}"]`,
+        );
+        if (cell && cell.dataset.occupied === "true") {
+          const shape = cell.querySelector(".shape");
+          if (shape) {
+            const colourName = cssToColourName[shape.dataset.colour];
+            if (colourName) playRowSound(colourName, row, time);
+          }
+        }
+      }
+
+      Tone.getDraw().schedule(() => {
+        setPlayhead(col);
+      }, time);
+
+      step++;
+    },
+    Array.from({ length: 10 }, (_, i) => i),
+    "8n",
+  );
+
+  loopSequence.start(0);
+  Tone.Transport.start();
+}
+
+function stopLoop() {
+  Tone.Transport.stop();
+  Tone.Transport.cancel();
+  if (loopSequence) {
+    loopSequence.stop();
+    loopSequence.dispose();
+    loopSequence = null;
+  }
+  setPlayhead(-1);
+}
+
+function toggleLoop() {
+  isPlaying = !isPlaying;
+  const playBtnImg = document.querySelector("#play-pause-btn");
+
+  if (isPlaying) {
+    playBtnImg.src = "img/pause.svg";
+    startLoop();
+  } else {
+    playBtnImg.src = "img/play.svg";
+    stopLoop();
+  }
+}
+
+const playBtn = document.querySelector("#play-pause-btn");
+
+playBtn.addEventListener("click", toggleLoop);
