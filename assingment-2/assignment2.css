@@ -64,9 +64,19 @@ path {
   position: relative;
 }
 
+.square.col-active {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 /* ---------------------------------------- */
 /* Shape Container*/
 /* ---------------------------------------- */
+
+.right {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Found it online to make the box more 3D */
 .shape-container {
   background-color: var(--grey-white);
@@ -137,4 +147,81 @@ path {
 #circle,
 #bridge {
   display: none;
+}
+
+/* ---------------------------------------- */
+/* Loop controls */
+/* ---------------------------------------- */
+
+.loop-controls {
+  background-color: var(--grey-white);
+  border-radius: var(--boarder-radius);
+  padding: 16px 20px;
+  margin-top: 16px;
+  width: 25vw;
+  margin-left: 100px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  box-shadow:
+    inset 0 6px 12px rgba(255, 255, 255, 0.35),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+#loop-play-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--blue);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#loop-play-btn svg {
+  fill: white;
+}
+
+#loop-play-btn.loop-playing .play-icon {
+  display: none;
+}
+
+#loop-play-btn.loop-playing .pause-icon {
+  display: block;
+}
+
+.loop-bpm-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.loop-label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+#loop-bpm {
+  flex: 1;
+}
+
+#loop-bpm-val {
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 30px;
+  text-align: right;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.loop-pips {
+  display: flex;
+  gap: 5px;
 }
