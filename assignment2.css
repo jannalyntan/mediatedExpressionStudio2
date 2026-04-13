@@ -220,8 +220,3 @@ path {
   text-align: right;
   color: rgba(0, 0, 0, 0.7);
 }
-
-.loop-pips {
-  display: flex;
-  gap: 5px;
-}
