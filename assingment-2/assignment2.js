@@ -258,23 +258,40 @@ function randomiseShapes() {
 //---------------------------------------------------------
 // Drag
 //---------------------------------------------------------
+// Got this information from a W3 tutorial of how to make things draggable
 
+// allowing to drag the shape
 function dragstartHandler(e) {
+  //tracking which shape the user is dragging
   activeShape = e.target;
   activeShape.classList.add("dragging");
   droppedOnGrid = false;
 
+  // getting the data of the shape, this is to track which part of the shape is the user dragging
+  // to ensure that the user can place the item based on the part of the shape that is grab on.
+
+  // figuring out where the user grabbed the shape so it doesn’t jump when dropped
   const shapeWidth = Number(activeShape.dataset.width) || 1;
+
+  // converting cursor position into grid units instead of pixels
   grabOffsetX = Math.floor(e.offsetX / (activeShape.offsetWidth / shapeWidth));
+
+  // clamping the value so it stays within the shape bounds
   grabOffsetX = Math.max(0, Math.min(grabOffsetX, shapeWidth - 1));
 
+  // doing the same for height so vertical placement feels correct
   const shapeHeight = Number(activeShape.dataset.height) || 1;
+
+  // converting cursor position into grid units instead of pixels
   grabOffsetY = Math.floor(
     e.offsetY / (activeShape.offsetHeight / shapeHeight),
   );
+
+  // clamping again to prevent overflow issues
   grabOffsetY = Math.max(0, Math.min(grabOffsetY, shapeHeight - 1));
 }
 
+// when the user stops dragging the item this is to reset everything for the next shape
 function dragendHandler(e) {
   e.target.classList.remove("dragging");
   if (activeShape && !droppedOnGrid) {
@@ -285,47 +302,67 @@ function dragendHandler(e) {
 }
 
 function dragoverHandler(e) {
+  // needed to allow dropping onto the grid otherwise the browser blocks it
   e.preventDefault();
 }
 
+// handling what happens once the user drops a shape onto the grid
 function dropHandler(e) {
   e.preventDefault();
   const square = e.currentTarget;
   if (!square || !activeShape) return;
 
+  // getting the row and column of the square the user dropped onto
   const dropRow = Number(square.dataset.row);
   const dropCol = Number(square.dataset.col);
+
+  // grabbing the shape size so I know how many cells it should take up
   const shapeWidth = Number(activeShape.dataset.width) || 1;
   const shapeHeight = Number(activeShape.dataset.height) || 1;
+
+  // adjusting the start position based on where inside the shape the user grabbed it
   const startCol = dropCol - grabOffsetX;
   const startRow = dropRow - grabOffsetY;
 
+  // storing all the cells the shape needs before placing it
   const cellsToFill = [];
 
+  // checking every cell the shape would cover
   for (let r = 0; r < shapeHeight; r++) {
     for (let c = 0; c < shapeWidth; c++) {
       const targetCell = document.querySelector(
         `.square[data-row="${startRow + r}"][data-col="${startCol + c}"]`,
       );
+
+      // stopping if part of the shape would go outside the grid
       if (!targetCell) return;
+
+      // stopping if the new position overlaps another shape
       if (
         targetCell.dataset.occupied === "true" &&
         targetCell.dataset.shapeId !== activeShape.dataset.shapeId
       )
         return;
+
       cellsToFill.push(targetCell);
     }
   }
 
+  // confirming the shape was successfully dropped on the grid
   droppedOnGrid = true;
+
+  // clearing old occupied cells in case the shape is being moved
   clearShapeOccupation(activeShape.dataset.shapeId);
 
+  // attaching the shape to the first valid cell
   const firstCell = cellsToFill[0];
   firstCell.appendChild(activeShape);
 
+  // converting shape size into pixel size so it fits the grid properly
   const totalWidth = gridToPixels(shapeWidth);
   const totalHeight = gridToPixels(shapeHeight);
 
+  // snapping the shape neatly into place visually
   activeShape.style.position = "absolute";
   activeShape.style.top = "0";
   activeShape.style.left = "0";
@@ -336,19 +373,21 @@ function dropHandler(e) {
   activeShape.style.opacity = "0.95";
   activeShape.style.transform = "rotate(0deg)";
 
+  // resizing the svg as well so the visual matches the new grid size
   const svg = activeShape.querySelector("svg");
   if (svg) {
     svg.setAttribute("width", totalWidth);
     svg.setAttribute("height", totalHeight);
   }
 
+  // marking all covered cells as occupied so shapes can’t overlap wrongly
   cellsToFill.forEach((cell) => {
     cell.dataset.occupied = "true";
     cell.dataset.shapeId = activeShape.dataset.shapeId;
     cell.classList.add("occupied");
   });
 
-  // ensure that if the loop is playing it won't double play the sound
+  // only playing the preview sound when the loop is not already running this is for the sound system
   if (isPlaying) {
   } else {
     playColourSound(cssToColourName[activeShape.dataset.colour], startRow);
@@ -356,9 +395,11 @@ function dropHandler(e) {
 }
 
 function clearShapeOccupation(shapeId) {
+  // finding all grid cells that belong to this shape
   document
     .querySelectorAll(`.square[data-shape-id="${shapeId}"]`)
     .forEach((cell) => {
+      // resetting the cell so it becomes available again
       cell.dataset.occupied = "false";
       cell.dataset.shapeId = "";
       cell.classList.remove("occupied");
@@ -369,6 +410,7 @@ function clearShapeOccupation(shapeId) {
 // Grid listeners
 //---------------------------------------------------------
 
+// listening for any movement for the shapes in the grid
 document.querySelectorAll(".square").forEach((square) => {
   square.addEventListener("dragover", dragoverHandler);
   square.addEventListener("drop", dropHandler);
@@ -378,6 +420,7 @@ document.querySelectorAll(".square").forEach((square) => {
 // Init
 //---------------------------------------------------------
 
+//to load the shapes when the window loads
 window.addEventListener("load", () => {
   spawnShapes();
   randomiseShapes();
@@ -390,10 +433,8 @@ window.addEventListener("load", () => {
 let loopSequence = null;
 let isPlaying = false;
 
-function setPlayhead(col) {
-  document.querySelectorAll(".pip").forEach((p, i) => {
-    p.classList.toggle("pip-active", i === col);
-  });
+function loopColour(col) {
+  // highlighting the active column in the grid so users can see where the loop is
   document.querySelectorAll(".square").forEach((cell) => {
     cell.classList.toggle("col-active", parseInt(cell.dataset.col) === col);
   });
@@ -411,40 +452,61 @@ loopBpm.addEventListener("input", () => {
   bpmDisplay.textContent = bpm;
 });
 
+// starting the loop and resetting it each time so it plays cleanly
 function startLoop() {
+  // clearing any old scheduled sounds so the loop doesn’t stack
   Tone.Transport.cancel();
+
+  // setting the tempo based on whatever the slider is currently at
   Tone.Transport.bpm.value = parseInt(loopBpm.value);
 
   let step = 0;
 
   loopSequence = new Tone.Sequence(
     (time) => {
+      // using modulo so the loop cycles back through the 10 columns
       const col = step % 10;
 
+      // checking each row in the current column for placed shapes
       for (let row = 0; row < 6; row++) {
         const cell = document.querySelector(
           `.square[data-row="${row}"][data-col="${col}"]`,
         );
+
+        // only playing sound if that cell is occupied
         if (cell && cell.dataset.occupied === "true") {
           const shape = cell.querySelector(".shape");
+
+          // getting the shape colour so I can match it to the right sound
           if (shape) {
             const colourName = cssToColourName[shape.dataset.colour];
+
+            // playing the note based on both colour and row position
             if (colourName) playRowSound(colourName, row, time);
           }
         }
       }
 
+      // syncing the visual loop feedback with the audio timing
       Tone.getDraw().schedule(() => {
-        setPlayhead(col);
+        loopColour(col);
       }, time);
 
+      // moving to the next step in the sequence
       step++;
     },
+
+    // creating 10 steps to match the 10 columns in the grid
     Array.from({ length: 10 }, (_, i) => i),
+
+    // each step plays on an eighth note
     "8n",
   );
 
+  // starting the sequence from the beginning
   loopSequence.start(0);
+
+  // starting the transport so the loop actually plays
   Tone.Transport.start();
 }
 
@@ -456,7 +518,7 @@ function stopLoop() {
     loopSequence.dispose();
     loopSequence = null;
   }
-  setPlayhead(-1);
+  loopColour(-1);
 }
 
 function toggleLoop() {
