@@ -171,29 +171,8 @@ path {
     0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-#loop-play-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background-color: var(--blue);
-  border: none;
+#play-pause-btn {
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-#loop-play-btn svg {
-  fill: white;
-}
-
-#loop-play-btn.loop-playing .play-icon {
-  display: none;
-}
-
-#loop-play-btn.loop-playing .pause-icon {
-  display: block;
 }
 
 .loop-bpm-row {

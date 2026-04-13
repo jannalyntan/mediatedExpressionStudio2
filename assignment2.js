@@ -9,7 +9,7 @@ const CELL_SIZE = 100;
 const GAP = 10;
 
 // Css Colour Name
-const cssToColourName = {
+const colours = {
   "var(--blue)": "blue",
   "var(--pink)": "pink",
   "var(--green)": "green",
@@ -390,7 +390,7 @@ function dropHandler(e) {
   // only playing the preview sound when the loop is not already running this is for the sound system
   if (isPlaying) {
   } else {
-    playColourSound(cssToColourName[activeShape.dataset.colour], startRow);
+    playColourSound(col[activeShape.dataset.colour], startRow);
   }
 }
 
@@ -479,7 +479,7 @@ function startLoop() {
 
           // getting the shape colour so I can match it to the right sound
           if (shape) {
-            const colourName = cssToColourName[shape.dataset.colour];
+            const colourName = colours[shape.dataset.colour];
 
             // playing the note based on both colour and row position
             if (colourName) playRowSound(colourName, row, time);
@@ -510,6 +510,7 @@ function startLoop() {
   Tone.Transport.start();
 }
 
+// to stop the loop
 function stopLoop() {
   Tone.Transport.stop();
   Tone.Transport.cancel();
@@ -521,19 +522,19 @@ function stopLoop() {
   loopColour(-1);
 }
 
+// linking the button to do its functions
+const playBtn = document.querySelector("#play-pause-btn");
+
 function toggleLoop() {
   isPlaying = !isPlaying;
-  const playBtnImg = document.querySelector("#play-pause-btn");
 
   if (isPlaying) {
-    playBtnImg.src = "img/pause.svg";
+    playBtn.src = "img/pause.svg";
     startLoop();
   } else {
-    playBtnImg.src = "img/play.svg";
+    playBtn.src = "img/play.svg";
     stopLoop();
   }
 }
-
-const playBtn = document.querySelector("#play-pause-btn");
 
 playBtn.addEventListener("click", toggleLoop);
