@@ -142,9 +142,13 @@ function gridToPixels(cells) {
 // Spawn
 //---------------------------------------------------------
 
+// I didn't want to fully type of the shape as well as I wanted it to be randomise so
+//  people can contantly create different sounds and loops.
 function spawnShapes() {
   const container = document.querySelector(".shape-container");
+  //seperated this from the others as I didn't want that many bridges
   const bridge = document.querySelector("#bridge");
+  //linking up the orginals shapes
   const originals = [
     document.querySelector("#rectangle"),
     document.querySelector("#triangle"),
@@ -152,6 +156,7 @@ function spawnShapes() {
     bridge,
   ].filter(Boolean);
 
+  // the different colours from the css
   const colours = [
     "var(--blue)",
     "var(--pink)",
@@ -159,17 +164,26 @@ function spawnShapes() {
     "var(--yellow)",
   ];
 
+  //this was to duplicate the different shapes, making it its own id and solid object
   originals.forEach((shape) => {
+    //ensuring that there is only 2 bridge
     const copies = shape === bridge ? 2 : 6;
     for (let i = 0; i < copies; i++) {
+      //cloning all the items inside that section, copying the shape entirely
       const clone = shape.cloneNode(true);
+
+      //removing the orginial ID to create a new one
       clone.removeAttribute("id");
+
+      //creating a new id for the shape
       clone.dataset.shapeId = `shape-${Date.now()}-${Math.random()}`;
 
+      //changing the colour of the shape
       const randomColour = colours[Math.floor(Math.random() * colours.length)];
       clone.style.setProperty("--shape-color", randomColour);
       clone.dataset.colour = randomColour;
 
+      //ensuring the shape is draggable
       clone.addEventListener("dragstart", dragstartHandler);
       clone.addEventListener("dragend", dragendHandler);
       container.appendChild(clone);
@@ -182,33 +196,46 @@ function spawnShapes() {
 //---------------------------------------------------------
 
 function randomiseShapes() {
+  // grabbing the container and all shapes inside it
   const container = document.querySelector(".shape-container");
   const shapes = Array.from(document.querySelectorAll(".shape"));
+
+  // getting container size so I can position things inside it
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
 
+  // shuffling shapes so layout feels random each time
   shapes.sort(() => Math.random() - 0.5);
 
+  // splitting the container into rough columns + rows so shapes don’t overlap too much
   const cols = 3;
   const rows = Math.ceil(shapes.length / cols);
+
   const zoneWidth = containerWidth / cols;
   const zoneHeight = containerHeight / rows;
 
   shapes.forEach((shape, i) => {
+    // grabbing svg size so placement is more accurate
     const svg = shape.querySelector("svg");
     const shapeWidth = svg ? parseInt(svg.getAttribute("width")) : 100;
     const shapeHeight = svg ? parseInt(svg.getAttribute("height")) : 100;
 
+    // figuring out which zone this shape belongs to
     const col = i % cols;
     const row = Math.floor(i / cols);
+
     const zoneX = col * zoneWidth;
     const zoneY = row * zoneHeight;
 
+    // centering shape inside its zone
     const centerX = zoneX + (zoneWidth - shapeWidth) / 2;
     const centerY = zoneY + (zoneHeight - shapeHeight) / 2;
+
+    // adding small randomness so it doesn’t look too grid-like
     const nudgeX = (Math.random() - 0.5) * 30;
     const nudgeY = (Math.random() - 0.5) * 30;
 
+    // making sure shapes stay inside container bounds
     const x = Math.max(
       0,
       Math.min(centerX + nudgeX, containerWidth - shapeWidth),
@@ -218,14 +245,16 @@ function randomiseShapes() {
       Math.min(centerY + nudgeY, containerHeight - shapeHeight),
     );
 
+    // applying position and random rotation for a more playful feel
     shape.style.position = "absolute";
     shape.style.left = `${x}px`;
     shape.style.top = `${y}px`;
     shape.style.transform = `rotate(${(Math.random() - 0.5) * 25}deg)`;
+
+    // random z-index so shapes overlap naturally
     shape.style.zIndex = Math.floor(Math.random() * 5);
   });
 }
-
 //---------------------------------------------------------
 // Drag
 //---------------------------------------------------------
