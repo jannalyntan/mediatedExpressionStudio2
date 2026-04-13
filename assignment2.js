@@ -9,7 +9,7 @@ const CELL_SIZE = 100;
 const GAP = 10;
 
 // Css Colour Name
-const colours = {
+const cssToColourName = {
   "var(--blue)": "blue",
   "var(--pink)": "pink",
   "var(--green)": "green",
@@ -187,6 +187,7 @@ function spawnShapes() {
       clone.addEventListener("dragstart", dragstartHandler);
       clone.addEventListener("dragend", dragendHandler);
       container.appendChild(clone);
+      clone.addEventListener("click", rotateShape);
     }
   });
 }
@@ -371,7 +372,11 @@ function dropHandler(e) {
   activeShape.style.margin = "0";
   activeShape.style.zIndex = "2";
   activeShape.style.opacity = "0.95";
-  activeShape.style.transform = "rotate(0deg)";
+
+  const current = parseInt(activeShape.dataset.rotation) || 0;
+  const nearest = Math.round(current / 90) * 90;
+  activeShape.dataset.rotation = nearest;
+  activeShape.style.transform = `rotate(${nearest}deg)`;
 
   // resizing the svg as well so the visual matches the new grid size
   const svg = activeShape.querySelector("svg");
@@ -390,7 +395,7 @@ function dropHandler(e) {
   // only playing the preview sound when the loop is not already running this is for the sound system
   if (isPlaying) {
   } else {
-    playColourSound(col[activeShape.dataset.colour], startRow);
+    playColourSound(cssToColourName[activeShape.dataset.colour], startRow);
   }
 }
 
@@ -404,6 +409,35 @@ function clearShapeOccupation(shapeId) {
       cell.dataset.shapeId = "";
       cell.classList.remove("occupied");
     });
+}
+//---------------------------------------------------------
+// Rotate
+//---------------------------------------------------------
+
+function rotateShape(e) {
+  // don't rotate while dragging
+  if (e.target.classList.contains("dragging")) return;
+
+  const shape = e.currentTarget;
+  const current = shape.dataset.rotation ? parseInt(shape.dataset.rotation) : 0;
+  const next = (current + 90) % 360;
+  shape.dataset.rotation = next;
+  shape.style.transform = `rotate(${next}deg)`;
+
+  // Finding the data set
+  const shapeWidth = Number(shape.dataset.width) || 1;
+  const shapeHeight = Number(shape.dataset.height) || 1;
+  console.log(shapeWidth, shapeHeight);
+
+  // swapping the height and the width
+  const newHeight = shapeWidth;
+  const newWidth = shapeHeight;
+
+  //changing the dataset to the new height and width
+  shape.dataset.width = "newHeight";
+  shape.dataset.width = "newWidth";
+
+  console.log(newWidth, newHeight);
 }
 
 //---------------------------------------------------------
@@ -479,7 +513,7 @@ function startLoop() {
 
           // getting the shape colour so I can match it to the right sound
           if (shape) {
-            const colourName = colours[shape.dataset.colour];
+            const colourName = cssToColourName[shape.dataset.colour];
 
             // playing the note based on both colour and row position
             if (colourName) playRowSound(colourName, row, time);
