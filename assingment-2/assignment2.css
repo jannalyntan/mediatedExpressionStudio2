@@ -81,7 +81,7 @@ path {
 .shape-container {
   background-color: var(--grey-white);
   width: 25vw;
-  height: 50vh;
+  height: 60vh;
   border-radius: var(--boarder-radius);
   margin-left: 100px;
 
