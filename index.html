@@ -166,7 +166,7 @@
 
           <div
             class="shape"
-            id="triangle"
+            id="triangle-0"
             draggable="true"
             data-width="1"
             data-height="1"
@@ -181,6 +181,72 @@
             >
               <path
                 d="M63.9263 8.54688L1.28046 148.422C-3.006 157.984 3.994 168.792 14.4784 168.792H139.77C150.254 168.792 157.254 157.984 152.968 148.422L90.3221 8.54688C85.218 -2.84896 69.0305 -2.84896 63.9263 8.54688Z"
+              />
+            </svg>
+          </div>
+
+          <div
+            class="shape"
+            id="triangle-90"
+            draggable="true"
+            data-width="1"
+            data-height="1"
+            ondragstart="dragstartHandler(event)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="169"
+              height="155"
+              viewBox="0 0 169 155"
+              fill="none"
+            >
+              <path
+                d="M160.245 63.9263L20.3698 1.28045C10.8073 -3.006 -4.5951e-05 3.99399 -4.64092e-05 14.4784L-5.18859e-05 139.77C-5.23442e-05 150.254 10.8072 157.254 20.3697 152.968L160.245 90.3221C171.641 85.218 171.641 69.0305 160.245 63.9263Z"
+                fill="#4860A7"
+              />
+            </svg>
+          </div>
+
+          <div
+            class="shape"
+            id="triangle-180"
+            draggable="true"
+            data-width="1"
+            data-height="1"
+            ondragstart="dragstartHandler(event)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="155"
+              height="169"
+              viewBox="0 0 155 169"
+              fill="none"
+            >
+              <path
+                d="M90.3221 160.245L152.968 20.3698C157.254 10.8073 150.254 1.10949e-05 139.77 1.01784e-05L14.4784 -7.74994e-07C3.994 -1.69157e-06 -3.00599 10.8073 1.28047 20.3698L63.9263 160.245C69.0305 171.641 85.2179 171.641 90.3221 160.245Z"
+                fill="#4860A7"
+              />
+            </svg>
+          </div>
+
+          <div
+            class="shape"
+            id="triangle-270"
+            draggable="true"
+            data-width="1"
+            data-height="1"
+            ondragstart="dragstartHandler(event)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="169"
+              height="155"
+              viewBox="0 0 169 155"
+              fill="none"
+            >
+              <path
+                d="M8.54687 90.3221L148.422 152.968C157.984 157.254 168.792 150.254 168.792 139.77L168.792 14.4784C168.792 3.99399 157.984 -3.00599 148.422 1.28047L8.54687 63.9263C-2.84896 69.0305 -2.84896 85.218 8.54687 90.3221Z"
+                fill="#4860A7"
               />
             </svg>
           </div>
@@ -274,13 +340,23 @@
       </section>
 
       <section class="loop-controls">
-        <a class="menu-btn" id="play-pause-loop"
-          ><img
-            src="img/play.svg"
-            alt="play-pause-btn"
-            id="play-pause-btn"
-            style="height: 40px"
-        /></a>
+        <div class="control-btn">
+          <a class="menu-btn" id="play-pause-loop"
+            ><img
+              src="img/play.svg"
+              alt="play-pause-btn"
+              id="play-pause-btn"
+              style="height: 40px"
+          /></a>
+
+          <a class="menu-btn" id="reset-btn"
+            ><img
+              src="img/refresh-arrow.png"
+              alt="reset-btn"
+              id="reset-btn"
+              style="height: 40px"
+          /></a>
+        </div>
 
         <div class="loop-bpm-row">
           <span class="loop-label">BPM</span>

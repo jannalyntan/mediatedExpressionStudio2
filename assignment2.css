@@ -172,7 +172,17 @@ path {
     0 8px 20px rgba(0, 0, 0, 0.08); */
 }
 
+.control-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 #play-pause-btn {
+  cursor: pointer;
+}
+
+#reset-btn {
   cursor: pointer;
 }
 

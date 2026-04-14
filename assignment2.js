@@ -160,7 +160,7 @@ function spawnShapes() {
   // using only the 0 degree versions as the starting templates
   const rectangle = document.querySelector("#rectangle-0");
   const circle = document.querySelector("#circle");
-  const triangle = document.querySelector("#triangle");
+  const triangle = document.querySelector("#triangle-0");
   const bridge = document.querySelector("#bridge-0");
 
   const originals = [rectangle, triangle, circle, bridge].filter(Boolean);
@@ -183,13 +183,26 @@ function spawnShapes() {
       const clone = shape.cloneNode(true);
 
       //removing the orginial ID to create a new one
+      // I did this to make it more random
       clone.removeAttribute("id");
 
       //creating a new id for the shape
       clone.dataset.shapeId = `shape-${Date.now()}-${Math.random()}`;
 
       //changing the colour of the shape
-      const randomColour = colours[Math.floor(Math.random() * colours.length)];
+      // create a shuffled colour pool
+      let colourPool = [...colours].sort(() => Math.random() - 0.5);
+
+      // pick colour from pool
+      const randomColour = colourPool.pop();
+
+      // if empty, reshuffle again
+      if (colourPool.length === 0) {
+        colourPool = [...colours].sort(() => Math.random() - 0.5);
+      }
+
+      clone.style.setProperty("--shape-color", randomColour);
+      clone.dataset.colour = randomColour;
       clone.style.setProperty("--shape-color", randomColour);
       clone.dataset.colour = randomColour;
 
@@ -204,6 +217,7 @@ function spawnShapes() {
         clone.dataset.shapeType = "circle";
       } else if (shape === triangle) {
         clone.dataset.shapeType = "triangle";
+        clone.dataset.rotationStep = "0";
       }
 
       //ensuring the shape is draggable
@@ -224,8 +238,9 @@ function spawnShapes() {
 function randomiseShapes() {
   // grabbing the container and all shapes inside it
   const container = document.querySelector(".shape-container");
-  const shapes = Array.from(document.querySelectorAll(".shape"));
-
+  const shapes = Array.from(
+    document.querySelectorAll(".shape-container .shape:not([id])"),
+  );
   // getting container size so I can position things inside it
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
@@ -340,8 +355,14 @@ function rotateShape(e) {
   const shape = e.currentTarget;
   const shapeType = shape.dataset.shapeType;
 
-  // only rectangle and bridge need rotation
-  if (shapeType !== "rectangle" && shapeType !== "bridge") return;
+  // only rectangle, bridge and triangle need rotation
+  if (
+    shapeType !== "rectangle" &&
+    shapeType !== "bridge" &&
+    shapeType !== "triangle"
+  ) {
+    return;
+  }
 
   const currentStep = Number(shape.dataset.rotationStep || 0);
 
@@ -360,6 +381,12 @@ function rotateShape(e) {
   if (shapeType === "bridge") {
     nextStep = (currentStep + 1) % 4;
     template = document.querySelector(`#bridge-${nextStep * 90}`);
+  }
+
+  // triangle keeps 4 states too
+  if (shapeType === "triangle") {
+    nextStep = (currentStep + 1) % 4;
+    template = document.querySelector(`#triangle-${nextStep * 90}`);
   }
 
   if (!template) return;
@@ -565,6 +592,50 @@ function clearShapeOccupation(shapeId) {
     });
 }
 
+function dropBackToContainer(e) {
+  e.preventDefault();
+  if (!activeShape) return;
+
+  const container = e.currentTarget;
+
+  // clear old occupied cells from the grid
+  clearShapeOccupation(activeShape.dataset.shapeId);
+
+  // mark this drag as successful
+  droppedOnGrid = true;
+
+  // move shape back into the container
+  container.appendChild(activeShape);
+
+  // reset its position inside the box
+  const containerRect = container.getBoundingClientRect();
+  const shapeWidth = activeShape.offsetWidth;
+  const shapeHeight = activeShape.offsetHeight;
+
+  const x = Math.max(
+    0,
+    Math.min(
+      e.clientX - containerRect.left - shapeWidth / 2,
+      containerRect.width - shapeWidth,
+    ),
+  );
+
+  const y = Math.max(
+    0,
+    Math.min(
+      e.clientY - containerRect.top - shapeHeight / 2,
+      containerRect.height - shapeHeight,
+    ),
+  );
+
+  activeShape.style.position = "absolute";
+  activeShape.style.left = `${x}px`;
+  activeShape.style.top = `${y}px`;
+  activeShape.style.margin = "0";
+  activeShape.style.zIndex = "2";
+  activeShape.style.opacity = "0.95";
+  activeShape.style.transform = "none";
+}
 //---------------------------------------------------------
 // Grid listeners
 //---------------------------------------------------------
@@ -574,6 +645,10 @@ document.querySelectorAll(".square").forEach((square) => {
   square.addEventListener("dragover", dragoverHandler);
   square.addEventListener("drop", dropHandler);
 });
+
+const shapeContainer = document.querySelector(".shape-container");
+shapeContainer.addEventListener("dragover", dragoverHandler);
+shapeContainer.addEventListener("drop", dropBackToContainer);
 
 //---------------------------------------------------------
 // Init
@@ -609,6 +684,9 @@ bpmDisplay.textContent = loopBpm.value;
 loopBpm.addEventListener("input", () => {
   const bpm = loopBpm.value;
   bpmDisplay.textContent = bpm;
+
+  // update loop speed live
+  Tone.Transport.bpm.value = parseInt(bpm);
 });
 
 // starting the loop and resetting it each time so it plays cleanly
@@ -676,6 +754,9 @@ function stopLoop() {
   }
   loopColour(-1);
 }
+//---------------------------------------------------------
+// Play Btn
+//---------------------------------------------------------
 
 // linking the button to do its functions
 const playBtn = document.querySelector("#play-pause-btn");
@@ -693,3 +774,12 @@ function toggleLoop() {
 }
 
 playBtn.addEventListener("click", toggleLoop);
+
+//---------------------------------------------------------
+// Reset Btn
+//---------------------------------------------------------
+const resetBtn = document.querySelector("#reset-btn");
+
+resetBtn.addEventListener("click", () => {
+  location.reload();
+});
