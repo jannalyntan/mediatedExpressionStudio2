@@ -7,8 +7,6 @@ let grabOffsetY = 0;
 // Placing the Cell size
 const CELL_SIZE = 100;
 const GAP = 10;
-const COLS = 10;
-const ROWS = 6;
 
 // Css Colour Name
 const cssToColourName = {
@@ -37,7 +35,6 @@ document.addEventListener(
 );
 
 const reverb = new Tone.Reverb({ decay: 1.5, wet: 0.15 }).toDestination();
-
 //After testing I realised I had to use the polysynth to get it to play together otherwise there would be an error
 //Testing this out wanted it to be a drum sound, similar to the a toy drum
 const drumSynth = new Tone.PolySynth(Tone.MembraneSynth, {
@@ -120,23 +117,19 @@ function playRowSound(colourName, row, time) {
     drumSynth.triggerAttackRelease(note, "16n", time + 0.24);
     return;
   }
-
   if (colourName === "pink") {
     pinkSynth.triggerAttackRelease(note, "8n", time);
     return;
   }
-
   if (colourName === "yellow") {
     yellowSynth.triggerAttackRelease(note, "16n", time);
     return;
   }
-
   if (colourName === "green") {
     greenSynth.triggerAttackRelease(note, "8n", time);
     return;
   }
 }
-
 //---------------------------------------------------------
 // Helpers
 //---------------------------------------------------------
@@ -145,50 +138,12 @@ function gridToPixels(cells) {
   return cells * CELL_SIZE + (cells - 1) * GAP;
 }
 
-function updateShapeSize(shape) {
-  const width = Number(shape.dataset.width) || 1;
-  const height = Number(shape.dataset.height) || 1;
-
-  shape.style.width = `${gridToPixels(width)}px`;
-  shape.style.height = `${gridToPixels(height)}px`;
-}
-
-function canPlaceShape(shape, startCol, startRow) {
-  const shapeWidth = Number(shape.dataset.width) || 1;
-  const shapeHeight = Number(shape.dataset.height) || 1;
-
-  // stopping if part of the shape would go outside the grid
-  if (startCol < 0 || startRow < 0) return false;
-  if (startCol + shapeWidth > COLS) return false;
-  if (startRow + shapeHeight > ROWS) return false;
-
-  // stopping if the new position overlaps another shape
-  for (let r = 0; r < shapeHeight; r++) {
-    for (let c = 0; c < shapeWidth; c++) {
-      const targetCell = document.querySelector(
-        `.square[data-row="${startRow + r}"][data-col="${startCol + c}"]`,
-      );
-
-      if (!targetCell) return false;
-
-      if (
-        targetCell.dataset.occupied === "true" &&
-        targetCell.dataset.shapeId !== shape.dataset.shapeId
-      ) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
 //---------------------------------------------------------
 // Spawn
 //---------------------------------------------------------
 
 // I didn't want to fully type of the shape as well as I wanted it to be randomise so
-// people can contantly create different sounds and loops.
+//  people can contantly create different sounds and loops.
 function spawnShapes() {
   const container = document.querySelector(".shape-container");
   //seperated this from the others as I didn't want that many bridges
@@ -213,7 +168,6 @@ function spawnShapes() {
   originals.forEach((shape) => {
     //ensuring that there is only 2 bridge
     const copies = shape === bridge ? 2 : 6;
-
     for (let i = 0; i < copies; i++) {
       //cloning all the items inside that section, copying the shape entirely
       const clone = shape.cloneNode(true);
@@ -229,18 +183,11 @@ function spawnShapes() {
       clone.style.setProperty("--shape-color", randomColour);
       clone.dataset.colour = randomColour;
 
-      // saving original size so rotate can swap back properly
-      clone.dataset.originalWidth = clone.dataset.width;
-      clone.dataset.originalHeight = clone.dataset.height;
-      clone.dataset.rotation = "0";
-
       //ensuring the shape is draggable
       clone.addEventListener("dragstart", dragstartHandler);
       clone.addEventListener("dragend", dragendHandler);
-      clone.addEventListener("click", rotateShape);
-
       container.appendChild(clone);
-      updateShapeSize(clone);
+      clone.addEventListener("click", rotateShape);
     }
   });
 }
@@ -252,7 +199,7 @@ function spawnShapes() {
 function randomiseShapes() {
   // grabbing the container and all shapes inside it
   const container = document.querySelector(".shape-container");
-  const shapes = Array.from(container.querySelectorAll(".shape"));
+  const shapes = Array.from(document.querySelectorAll(".shape"));
 
   // getting container size so I can position things inside it
   const containerWidth = container.clientWidth;
@@ -269,8 +216,10 @@ function randomiseShapes() {
   const zoneHeight = containerHeight / rows;
 
   shapes.forEach((shape, i) => {
-    const shapeWidth = shape.offsetWidth;
-    const shapeHeight = shape.offsetHeight;
+    // grabbing svg size so placement is more accurate
+    const svg = shape.querySelector("svg");
+    const shapeWidth = svg ? parseInt(svg.getAttribute("width")) : 100;
+    const shapeHeight = svg ? parseInt(svg.getAttribute("height")) : 100;
 
     // figuring out which zone this shape belongs to
     const col = i % cols;
@@ -297,62 +246,16 @@ function randomiseShapes() {
       Math.min(centerY + nudgeY, containerHeight - shapeHeight),
     );
 
-    // applying position
+    // applying position and random rotation for a more playful feel
     shape.style.position = "absolute";
     shape.style.left = `${x}px`;
     shape.style.top = `${y}px`;
-
-    // saving reset spot in case the drop fails
-    shape.dataset.startLeft = `${x}px`;
-    shape.dataset.startTop = `${y}px`;
-
-    // keeping the outer box straight
-    shape.style.transform = "none";
-
-    // rotating only the svg
-    const svg = shape.querySelector("svg");
-    if (svg) {
-      svg.style.transform = "rotate(0deg)";
-    }
+    shape.style.transform = `rotate(${(Math.random() - 0.5) * 25}deg)`;
 
     // random z-index so shapes overlap naturally
     shape.style.zIndex = Math.floor(Math.random() * 5);
   });
 }
-//---------------------------------------------------------
-// Rotate
-//---------------------------------------------------------
-
-function rotateShape(e) {
-  if (e.currentTarget.classList.contains("dragging")) return;
-
-  const shape = e.currentTarget;
-  const svg = shape.querySelector("svg");
-
-  const currentRotation = Number(shape.dataset.rotation || 0);
-  const nextRotation = (currentRotation + 90) % 360;
-
-  const originalWidth = Number(shape.dataset.originalWidth) || 1;
-  const originalHeight = Number(shape.dataset.originalHeight) || 1;
-  const shouldSwap = nextRotation === 90 || nextRotation === 270;
-
-  // swap width/height so the grid logic matches the rotated shape
-  shape.dataset.width = shouldSwap ? originalHeight : originalWidth;
-  shape.dataset.height = shouldSwap ? originalWidth : originalHeight;
-  shape.dataset.rotation = nextRotation;
-
-  // resize the outer box to match the rotated footprint
-  updateShapeSize(shape);
-
-  // rotate the svg only so the shape stays aligned to the grid nicely
-  if (svg) {
-    svg.style.transform = `rotate(${nextRotation}deg)`;
-  }
-
-  // if already on grid, clear old occupied squares before placing again
-  clearShapeOccupation(shape.dataset.shapeId);
-}
-
 //---------------------------------------------------------
 // Drag
 //---------------------------------------------------------
@@ -361,7 +264,7 @@ function rotateShape(e) {
 // allowing to drag the shape
 function dragstartHandler(e) {
   //tracking which shape the user is dragging
-  activeShape = e.currentTarget;
+  activeShape = e.target;
   activeShape.classList.add("dragging");
   droppedOnGrid = false;
 
@@ -370,31 +273,31 @@ function dragstartHandler(e) {
 
   // figuring out where the user grabbed the shape so it doesn’t jump when dropped
   const shapeWidth = Number(activeShape.dataset.width) || 1;
-  const shapeHeight = Number(activeShape.dataset.height) || 1;
 
   // converting cursor position into grid units instead of pixels
   grabOffsetX = Math.floor(e.offsetX / (activeShape.offsetWidth / shapeWidth));
+
+  // clamping the value so it stays within the shape bounds
+  grabOffsetX = Math.max(0, Math.min(grabOffsetX, shapeWidth - 1));
+
+  // doing the same for height so vertical placement feels correct
+  const shapeHeight = Number(activeShape.dataset.height) || 1;
+
+  // converting cursor position into grid units instead of pixels
   grabOffsetY = Math.floor(
     e.offsetY / (activeShape.offsetHeight / shapeHeight),
   );
 
-  // clamping the value so it stays within the shape bounds
-  grabOffsetX = Math.max(0, Math.min(grabOffsetX, shapeWidth - 1));
+  // clamping again to prevent overflow issues
   grabOffsetY = Math.max(0, Math.min(grabOffsetY, shapeHeight - 1));
 }
 
 // when the user stops dragging the item this is to reset everything for the next shape
 function dragendHandler(e) {
-  e.currentTarget.classList.remove("dragging");
-
+  e.target.classList.remove("dragging");
   if (activeShape && !droppedOnGrid) {
-    // putting the shape back to where it started if drop failed
-    if (activeShape.dataset.startLeft && activeShape.dataset.startTop) {
-      activeShape.style.left = activeShape.dataset.startLeft;
-      activeShape.style.top = activeShape.dataset.startTop;
-    }
+    clearShapeOccupation(activeShape.dataset.shapeId);
   }
-
   droppedOnGrid = false;
   activeShape = null;
 }
@@ -414,15 +317,13 @@ function dropHandler(e) {
   const dropRow = Number(square.dataset.row);
   const dropCol = Number(square.dataset.col);
 
+  // grabbing the shape size so I know how many cells it should take up
   const shapeWidth = Number(activeShape.dataset.width) || 1;
   const shapeHeight = Number(activeShape.dataset.height) || 1;
 
   // adjusting the start position based on where inside the shape the user grabbed it
   const startCol = dropCol - grabOffsetX;
   const startRow = dropRow - grabOffsetY;
-
-  // stopping if the rotated shape would not fit in the grid
-  if (!canPlaceShape(activeShape, startCol, startRow)) return;
 
   // storing all the cells the shape needs before placing it
   const cellsToFill = [];
@@ -434,9 +335,17 @@ function dropHandler(e) {
         `.square[data-row="${startRow + r}"][data-col="${startCol + c}"]`,
       );
 
-      if (targetCell) {
-        cellsToFill.push(targetCell);
-      }
+      // stopping if part of the shape would go outside the grid
+      if (!targetCell) return;
+
+      // stopping if the new position overlaps another shape
+      if (
+        targetCell.dataset.occupied === "true" &&
+        targetCell.dataset.shapeId !== activeShape.dataset.shapeId
+      )
+        return;
+
+      cellsToFill.push(targetCell);
     }
   }
 
@@ -463,14 +372,17 @@ function dropHandler(e) {
   activeShape.style.margin = "0";
   activeShape.style.zIndex = "2";
   activeShape.style.opacity = "0.95";
-  activeShape.style.transform = "none";
 
-  // keeping the svg rotation instead of rotating the whole shape box
+  const current = parseInt(activeShape.dataset.rotation) || 0;
+  const nearest = Math.round(current / 90) * 90;
+  activeShape.dataset.rotation = nearest;
+  activeShape.style.transform = `rotate(${nearest}deg)`;
+
+  // resizing the svg as well so the visual matches the new grid size
   const svg = activeShape.querySelector("svg");
-  const currentRotation = Number(activeShape.dataset.rotation || 0);
-
   if (svg) {
-    svg.style.transform = `rotate(${currentRotation}deg)`;
+    svg.setAttribute("width", totalWidth);
+    svg.setAttribute("height", totalHeight);
   }
 
   // marking all covered cells as occupied so shapes can’t overlap wrongly
@@ -481,7 +393,8 @@ function dropHandler(e) {
   });
 
   // only playing the preview sound when the loop is not already running this is for the sound system
-  if (!isPlaying) {
+  if (isPlaying) {
+  } else {
     playColourSound(cssToColourName[activeShape.dataset.colour], startRow);
   }
 }
@@ -496,6 +409,35 @@ function clearShapeOccupation(shapeId) {
       cell.dataset.shapeId = "";
       cell.classList.remove("occupied");
     });
+}
+//---------------------------------------------------------
+// Rotate
+//---------------------------------------------------------
+
+function rotateShape(e) {
+  // don't rotate while dragging
+  if (e.target.classList.contains("dragging")) return;
+
+  const shape = e.currentTarget;
+  const current = shape.dataset.rotation ? parseInt(shape.dataset.rotation) : 0;
+  const next = (current + 90) % 360;
+  shape.dataset.rotation = next;
+  shape.style.transform = `rotate(${next}deg)`;
+
+  // Finding the data set
+  const shapeWidth = Number(shape.dataset.width) || 1;
+  const shapeHeight = Number(shape.dataset.height) || 1;
+  console.log(shapeWidth, shapeHeight);
+
+  // swapping the height and the width
+  const newHeight = shapeWidth;
+  const newWidth = shapeHeight;
+
+  //changing the dataset to the new height and width
+  shape.dataset.width = "newHeight";
+  shape.dataset.width = "newWidth";
+
+  console.log(newWidth, newHeight);
 }
 
 //---------------------------------------------------------
@@ -606,13 +548,11 @@ function startLoop() {
 function stopLoop() {
   Tone.Transport.stop();
   Tone.Transport.cancel();
-
   if (loopSequence) {
     loopSequence.stop();
     loopSequence.dispose();
     loopSequence = null;
   }
-
   loopColour(-1);
 }
 

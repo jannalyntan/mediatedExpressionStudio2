@@ -35,6 +35,7 @@ document.addEventListener(
 );
 
 const reverb = new Tone.Reverb({ decay: 1.5, wet: 0.15 }).toDestination();
+
 //After testing I realised I had to use the polysynth to get it to play together otherwise there would be an error
 //Testing this out wanted it to be a drum sound, similar to the a toy drum
 const drumSynth = new Tone.PolySynth(Tone.MembraneSynth, {
@@ -130,6 +131,7 @@ function playRowSound(colourName, row, time) {
     return;
   }
 }
+
 //---------------------------------------------------------
 // Helpers
 //---------------------------------------------------------
@@ -138,23 +140,30 @@ function gridToPixels(cells) {
   return cells * CELL_SIZE + (cells - 1) * GAP;
 }
 
+function updateShapeSize(shape) {
+  const width = Number(shape.dataset.width) || 1;
+  const height = Number(shape.dataset.height) || 1;
+
+  shape.style.width = `${gridToPixels(width)}px`;
+  shape.style.height = `${gridToPixels(height)}px`;
+}
+
 //---------------------------------------------------------
 // Spawn
 //---------------------------------------------------------
 
 // I didn't want to fully type of the shape as well as I wanted it to be randomise so
-//  people can contantly create different sounds and loops.
+// people can contantly create different sounds and loops.
 function spawnShapes() {
   const container = document.querySelector(".shape-container");
-  //seperated this from the others as I didn't want that many bridges
-  const bridge = document.querySelector("#bridge");
-  //linking up the orginals shapes
-  const originals = [
-    document.querySelector("#rectangle"),
-    document.querySelector("#triangle"),
-    document.querySelector("#circle"),
-    bridge,
-  ].filter(Boolean);
+
+  // using only the horizontal versions as the starting templates
+  const rectangle = document.querySelector("#rectangle-horizontal");
+  const circle = document.querySelector("#circle");
+  const triangle = document.querySelector("#triangle");
+  const bridge = document.querySelector("#bridge-horizontal");
+
+  const originals = [rectangle, triangle, circle, bridge].filter(Boolean);
 
   // the different colours from the css
   const colours = [
@@ -168,6 +177,7 @@ function spawnShapes() {
   originals.forEach((shape) => {
     //ensuring that there is only 2 bridge
     const copies = shape === bridge ? 2 : 6;
+
     for (let i = 0; i < copies; i++) {
       //cloning all the items inside that section, copying the shape entirely
       const clone = shape.cloneNode(true);
@@ -183,11 +193,26 @@ function spawnShapes() {
       clone.style.setProperty("--shape-color", randomColour);
       clone.dataset.colour = randomColour;
 
+      // keeping track of what kind of shape this is for swapping later
+      if (shape === rectangle) {
+        clone.dataset.shapeType = "rectangle";
+        clone.dataset.rotated = "false";
+      } else if (shape === bridge) {
+        clone.dataset.shapeType = "bridge";
+        clone.dataset.rotated = "false";
+      } else if (shape === circle) {
+        clone.dataset.shapeType = "circle";
+      } else if (shape === triangle) {
+        clone.dataset.shapeType = "triangle";
+      }
+
       //ensuring the shape is draggable
       clone.addEventListener("dragstart", dragstartHandler);
       clone.addEventListener("dragend", dragendHandler);
-      container.appendChild(clone);
       clone.addEventListener("click", rotateShape);
+
+      container.appendChild(clone);
+      updateShapeSize(clone);
     }
   });
 }
@@ -257,6 +282,150 @@ function randomiseShapes() {
   });
 }
 //---------------------------------------------------------
+// Rotate
+//---------------------------------------------------------
+function getShapeTopLeftCell(shapeId) {
+  const cells = Array.from(
+    document.querySelectorAll(`.square[data-shape-id="${shapeId}"]`),
+  );
+
+  if (cells.length === 0) return null;
+
+  let minRow = Infinity;
+  let minCol = Infinity;
+
+  cells.forEach((cell) => {
+    const row = Number(cell.dataset.row);
+    const col = Number(cell.dataset.col);
+
+    if (row < minRow) minRow = row;
+    if (col < minCol) minCol = col;
+  });
+
+  return { row: minRow, col: minCol };
+}
+function canPlaceAt(shape, startRow, startCol) {
+  const shapeWidth = Number(shape.dataset.width) || 1;
+  const shapeHeight = Number(shape.dataset.height) || 1;
+
+  const cellsToFill = [];
+
+  for (let r = 0; r < shapeHeight; r++) {
+    for (let c = 0; c < shapeWidth; c++) {
+      const targetCell = document.querySelector(
+        `.square[data-row="${startRow + r}"][data-col="${startCol + c}"]`,
+      );
+
+      // stopping if part of the shape would go outside the grid
+      if (!targetCell) return null;
+
+      // stopping if the new position overlaps another shape
+      if (
+        targetCell.dataset.occupied === "true" &&
+        targetCell.dataset.shapeId !== shape.dataset.shapeId
+      ) {
+        return null;
+      }
+
+      cellsToFill.push(targetCell);
+    }
+  }
+
+  return cellsToFill;
+}
+
+function rotateShape(e) {
+  if (e.currentTarget.classList.contains("dragging")) return;
+
+  const shape = e.currentTarget;
+  const shapeType = shape.dataset.shapeType;
+
+  // only rectangle and bridge need rotation
+  if (shapeType !== "rectangle" && shapeType !== "bridge") return;
+
+  const isRotated = shape.dataset.rotated === "true";
+  let template;
+
+  if (shapeType === "rectangle") {
+    template = isRotated
+      ? document.querySelector("#rectangle-horizontal")
+      : document.querySelector("#rectangle-verticle");
+  }
+
+  if (shapeType === "bridge") {
+    template = isRotated
+      ? document.querySelector("#bridge-horizontal")
+      : document.querySelector("#bridge-verticle");
+  }
+
+  if (!template) return;
+
+  // checking if this shape is already placed on the grid
+  const topLeft = getShapeTopLeftCell(shape.dataset.shapeId);
+
+  // saving old state in case rotation does not fit
+  const oldHTML = shape.innerHTML;
+  const oldWidth = shape.dataset.width;
+  const oldHeight = shape.dataset.height;
+  const oldRotated = shape.dataset.rotated;
+
+  // clearing old occupied cells first
+  clearShapeOccupation(shape.dataset.shapeId);
+
+  // swapping svg instead of rotating so grid + visuals always match
+  shape.innerHTML = template.innerHTML;
+  shape.dataset.width = template.dataset.width;
+  shape.dataset.height = template.dataset.height;
+  shape.dataset.rotated = isRotated ? "false" : "true";
+
+  updateShapeSize(shape);
+
+  // if shape is on the grid, update the occupied cells too
+  if (topLeft) {
+    const newCells = canPlaceAt(shape, topLeft.row, topLeft.col);
+
+    // if rotated version does not fit, switch back
+    if (!newCells) {
+      shape.innerHTML = oldHTML;
+      shape.dataset.width = oldWidth;
+      shape.dataset.height = oldHeight;
+      shape.dataset.rotated = oldRotated;
+      updateShapeSize(shape);
+
+      const oldCells = canPlaceAt(shape, topLeft.row, topLeft.col);
+      if (oldCells) {
+        oldCells.forEach((cell) => {
+          cell.dataset.occupied = "true";
+          cell.dataset.shapeId = shape.dataset.shapeId;
+          cell.classList.add("occupied");
+        });
+      }
+
+      return;
+    }
+
+    // marking the new rotated footprint
+    newCells.forEach((cell) => {
+      cell.dataset.occupied = "true";
+      cell.dataset.shapeId = shape.dataset.shapeId;
+      cell.classList.add("occupied");
+    });
+
+    // keeping the shape attached to the same top-left square
+    const firstCell = newCells[0];
+    firstCell.appendChild(shape);
+
+    shape.style.position = "absolute";
+    shape.style.top = "0";
+    shape.style.left = "0";
+    shape.style.margin = "0";
+    shape.style.zIndex = "2";
+    shape.style.opacity = "0.95";
+    shape.style.transform = "none";
+  }
+}
+
+//---------------------------------------------------------
 // Drag
 //---------------------------------------------------------
 // Got this information from a W3 tutorial of how to make things draggable
@@ -264,7 +433,7 @@ function randomiseShapes() {
 // allowing to drag the shape
 function dragstartHandler(e) {
   //tracking which shape the user is dragging
-  activeShape = e.target;
+  activeShape = e.currentTarget;
   activeShape.classList.add("dragging");
   droppedOnGrid = false;
 
@@ -273,28 +442,22 @@ function dragstartHandler(e) {
 
   // figuring out where the user grabbed the shape so it doesn’t jump when dropped
   const shapeWidth = Number(activeShape.dataset.width) || 1;
-
-  // converting cursor position into grid units instead of pixels
-  grabOffsetX = Math.floor(e.offsetX / (activeShape.offsetWidth / shapeWidth));
-
-  // clamping the value so it stays within the shape bounds
-  grabOffsetX = Math.max(0, Math.min(grabOffsetX, shapeWidth - 1));
-
-  // doing the same for height so vertical placement feels correct
   const shapeHeight = Number(activeShape.dataset.height) || 1;
 
   // converting cursor position into grid units instead of pixels
+  grabOffsetX = Math.floor(e.offsetX / (activeShape.offsetWidth / shapeWidth));
   grabOffsetY = Math.floor(
     e.offsetY / (activeShape.offsetHeight / shapeHeight),
   );
 
-  // clamping again to prevent overflow issues
+  // clamping the value so it stays within the shape bounds
+  grabOffsetX = Math.max(0, Math.min(grabOffsetX, shapeWidth - 1));
   grabOffsetY = Math.max(0, Math.min(grabOffsetY, shapeHeight - 1));
 }
 
 // when the user stops dragging the item this is to reset everything for the next shape
 function dragendHandler(e) {
-  e.target.classList.remove("dragging");
+  e.currentTarget.classList.remove("dragging");
   if (activeShape && !droppedOnGrid) {
     clearShapeOccupation(activeShape.dataset.shapeId);
   }
@@ -317,7 +480,6 @@ function dropHandler(e) {
   const dropRow = Number(square.dataset.row);
   const dropCol = Number(square.dataset.col);
 
-  // grabbing the shape size so I know how many cells it should take up
   const shapeWidth = Number(activeShape.dataset.width) || 1;
   const shapeHeight = Number(activeShape.dataset.height) || 1;
 
@@ -342,8 +504,9 @@ function dropHandler(e) {
       if (
         targetCell.dataset.occupied === "true" &&
         targetCell.dataset.shapeId !== activeShape.dataset.shapeId
-      )
+      ) {
         return;
+      }
 
       cellsToFill.push(targetCell);
     }
@@ -372,18 +535,7 @@ function dropHandler(e) {
   activeShape.style.margin = "0";
   activeShape.style.zIndex = "2";
   activeShape.style.opacity = "0.95";
-
-  const current = parseInt(activeShape.dataset.rotation) || 0;
-  const nearest = Math.round(current / 90) * 90;
-  activeShape.dataset.rotation = nearest;
-  activeShape.style.transform = `rotate(${nearest}deg)`;
-
-  // resizing the svg as well so the visual matches the new grid size
-  const svg = activeShape.querySelector("svg");
-  if (svg) {
-    svg.setAttribute("width", totalWidth);
-    svg.setAttribute("height", totalHeight);
-  }
+  activeShape.style.transform = "none";
 
   // marking all covered cells as occupied so shapes can’t overlap wrongly
   cellsToFill.forEach((cell) => {
@@ -393,8 +545,7 @@ function dropHandler(e) {
   });
 
   // only playing the preview sound when the loop is not already running this is for the sound system
-  if (isPlaying) {
-  } else {
+  if (!isPlaying) {
     playColourSound(cssToColourName[activeShape.dataset.colour], startRow);
   }
 }
@@ -409,35 +560,6 @@ function clearShapeOccupation(shapeId) {
       cell.dataset.shapeId = "";
       cell.classList.remove("occupied");
     });
-}
-//---------------------------------------------------------
-// Rotate
-//---------------------------------------------------------
-
-function rotateShape(e) {
-  // don't rotate while dragging
-  if (e.target.classList.contains("dragging")) return;
-
-  const shape = e.currentTarget;
-  const current = shape.dataset.rotation ? parseInt(shape.dataset.rotation) : 0;
-  const next = (current + 90) % 360;
-  shape.dataset.rotation = next;
-  shape.style.transform = `rotate(${next}deg)`;
-
-  // Finding the data set
-  const shapeWidth = Number(shape.dataset.width) || 1;
-  const shapeHeight = Number(shape.dataset.height) || 1;
-  console.log(shapeWidth, shapeHeight);
-
-  // swapping the height and the width
-  const newHeight = shapeWidth;
-  const newWidth = shapeHeight;
-
-  //changing the dataset to the new height and width
-  shape.dataset.width = "newHeight";
-  shape.dataset.width = "newWidth";
-
-  console.log(newWidth, newHeight);
 }
 
 //---------------------------------------------------------
@@ -529,11 +651,7 @@ function startLoop() {
       // moving to the next step in the sequence
       step++;
     },
-
-    // creating 10 steps to match the 10 columns in the grid
     Array.from({ length: 10 }, (_, i) => i),
-
-    // each step plays on an eighth note
     "8n",
   );
 
