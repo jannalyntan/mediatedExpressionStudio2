@@ -136,12 +136,17 @@ path {
 }
 
 /* hide the original shapes, they are just used as templates to clone from */
-#rectangle-horizontal,
-#rectangle-verticle,
-#triangle,
+#rectangle-0,
+#rectangle-90,
+#triangle-0,
+#triangle-90,
+#triangle-180,
+#triangle-270,
 #circle,
-#bridge-horizontal,
-#bridge-verticle {
+#bridge-0,
+#bridge-90,
+#bridge-180,
+#bridge-270 {
   display: none;
 }
 

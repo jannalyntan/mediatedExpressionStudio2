@@ -157,11 +157,11 @@ function updateShapeSize(shape) {
 function spawnShapes() {
   const container = document.querySelector(".shape-container");
 
-  // using only the horizontal versions as the starting templates
-  const rectangle = document.querySelector("#rectangle-horizontal");
+  // using only the 0 degree versions as the starting templates
+  const rectangle = document.querySelector("#rectangle-0");
   const circle = document.querySelector("#circle");
   const triangle = document.querySelector("#triangle");
-  const bridge = document.querySelector("#bridge-horizontal");
+  const bridge = document.querySelector("#bridge-0");
 
   const originals = [rectangle, triangle, circle, bridge].filter(Boolean);
 
@@ -196,10 +196,10 @@ function spawnShapes() {
       // keeping track of what kind of shape this is for swapping later
       if (shape === rectangle) {
         clone.dataset.shapeType = "rectangle";
-        clone.dataset.rotated = "false";
+        clone.dataset.rotationStep = "0";
       } else if (shape === bridge) {
         clone.dataset.shapeType = "bridge";
-        clone.dataset.rotated = "false";
+        clone.dataset.rotationStep = "0";
       } else if (shape === circle) {
         clone.dataset.shapeType = "circle";
       } else if (shape === triangle) {
@@ -343,19 +343,23 @@ function rotateShape(e) {
   // only rectangle and bridge need rotation
   if (shapeType !== "rectangle" && shapeType !== "bridge") return;
 
-  const isRotated = shape.dataset.rotated === "true";
+  const currentStep = Number(shape.dataset.rotationStep || 0);
+
+  let nextStep;
   let template;
 
+  // rectangle only needs 2 states: 0 and 90
   if (shapeType === "rectangle") {
-    template = isRotated
-      ? document.querySelector("#rectangle-horizontal")
-      : document.querySelector("#rectangle-verticle");
+    nextStep = (currentStep + 1) % 2;
+
+    const angle = nextStep === 0 ? 0 : 90;
+    template = document.querySelector(`#rectangle-${angle}`);
   }
 
+  // bridge keeps 4 states
   if (shapeType === "bridge") {
-    template = isRotated
-      ? document.querySelector("#bridge-horizontal")
-      : document.querySelector("#bridge-verticle");
+    nextStep = (currentStep + 1) % 4;
+    template = document.querySelector(`#bridge-${nextStep * 90}`);
   }
 
   if (!template) return;
@@ -367,7 +371,7 @@ function rotateShape(e) {
   const oldHTML = shape.innerHTML;
   const oldWidth = shape.dataset.width;
   const oldHeight = shape.dataset.height;
-  const oldRotated = shape.dataset.rotated;
+  const oldRotationStep = shape.dataset.rotationStep || "0";
 
   // clearing old occupied cells first
   clearShapeOccupation(shape.dataset.shapeId);
@@ -376,7 +380,7 @@ function rotateShape(e) {
   shape.innerHTML = template.innerHTML;
   shape.dataset.width = template.dataset.width;
   shape.dataset.height = template.dataset.height;
-  shape.dataset.rotated = isRotated ? "false" : "true";
+  shape.dataset.rotationStep = String(nextStep);
 
   updateShapeSize(shape);
 
@@ -389,7 +393,7 @@ function rotateShape(e) {
       shape.innerHTML = oldHTML;
       shape.dataset.width = oldWidth;
       shape.dataset.height = oldHeight;
-      shape.dataset.rotated = oldRotated;
+      shape.dataset.rotationStep = oldRotationStep;
       updateShapeSize(shape);
 
       const oldCells = canPlaceAt(shape, topLeft.row, topLeft.col);
@@ -424,7 +428,6 @@ function rotateShape(e) {
     shape.style.transform = "none";
   }
 }
-
 //---------------------------------------------------------
 // Drag
 //---------------------------------------------------------
