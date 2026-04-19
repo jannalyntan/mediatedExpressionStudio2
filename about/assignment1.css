@@ -248,8 +248,8 @@ button:hover {
 
 #background3 {
   width: 350px;
-  height: 200px;
-  background-color: var(--backgroundBlue);
+  height: 0px;
+  background-color: white;
 }
 
 .colouredBg {
@@ -265,7 +265,8 @@ button:hover {
 
 #conceptualResponse,
 #technicalApproach,
-#interactive {
+#reflection,
+#peerUserTesting {
   font-size: 180px;
   color: var(--red);
 }
