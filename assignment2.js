@@ -299,11 +299,13 @@ function randomiseShapes() {
 //---------------------------------------------------------
 // Rotate
 //---------------------------------------------------------
+// finding all the cells that belong to one shape
 function getShapeTopLeftCell(shapeId) {
   const cells = Array.from(
     document.querySelectorAll(`.square[data-shape-id="${shapeId}"]`),
   );
 
+  // if the shape is not on the grid return nothing
   if (cells.length === 0) return null;
 
   let minRow = Infinity;
@@ -313,18 +315,23 @@ function getShapeTopLeftCell(shapeId) {
     const row = Number(cell.dataset.row);
     const col = Number(cell.dataset.col);
 
+    // tracking the smallest row and col so I can get the top left starting point
     if (row < minRow) minRow = row;
     if (col < minCol) minCol = col;
   });
 
+  // returning the top left cell position of the shape
   return { row: minRow, col: minCol };
 }
+
+// checking if a shape can be placed in a certain grid position
 function canPlaceAt(shape, startRow, startCol) {
   const shapeWidth = Number(shape.dataset.width) || 1;
   const shapeHeight = Number(shape.dataset.height) || 1;
 
   const cellsToFill = [];
 
+  // looping through the width and height of the shape
   for (let r = 0; r < shapeHeight; r++) {
     for (let c = 0; c < shapeWidth; c++) {
       const targetCell = document.querySelector(
@@ -342,10 +349,12 @@ function canPlaceAt(shape, startRow, startCol) {
         return null;
       }
 
+      // saving valid cells so I can place the shape there later
       cellsToFill.push(targetCell);
     }
   }
 
+  // returning all the valid cells the shape can fill
   return cellsToFill;
 }
 
@@ -496,7 +505,7 @@ function dragendHandler(e) {
 }
 
 function dragoverHandler(e) {
-  // needed to allow dropping onto the grid otherwise the browser blocks it
+  // needed to allow dropping onto the grid otherwise the browser blocks it according to the API
   e.preventDefault();
 }
 
