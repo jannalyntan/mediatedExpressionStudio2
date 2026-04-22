@@ -14,10 +14,10 @@
     />
 
     <!-- Styles -->
-    <link rel="stylesheet" href="assignment1.css" />
+    <link rel="stylesheet" href="assignment2.css" />
 
     <!-- Scripts -->
-    <script src="assignment1.js" defer></script>
+    <script src="assignment2.js" defer></script>
   </head>
 
   <body>
@@ -93,23 +93,21 @@
       </div>
 
       <br /><br /><br />
+      <p>
+        To recreate this in a digital context, I developed a website that allows
+        users to build compositions using simple block-like shapes. I then
+        extended this idea by translating these visual builds into sound using
+        Tone.js. This adds another layer to the interaction, where users are not
+        only building visually, but also unintentionally creating sound patterns
+        through their placement.
+      </p>
 
       <div class="sidebyside">
         <div class="left">
-          <img
-            src="images/vetvisst-bricks-6909999.jpg"
-            alt="code-1"
-            style="width: 750px"
-          />
+          <img src="images/webpage.png" alt="code-1" style="width: 1000px" />
         </div>
         <div class="right">
           <p style="margin-right: -1px">
-            To recreate this in a digital context, I developed a website that
-            allows users to build compositions using simple block-like shapes. I
-            then extended this idea by translating these visual builds into
-            sound using Tone.js. This adds another layer to the interaction,
-            where users are not only building visually, but also unintentionally
-            creating sound patterns through their placement.
             <br /><br />
             The novelty of this project comes from combining spatial interaction
             with sound. Instead of using common inputs like typing or clicking
@@ -131,13 +129,20 @@
             in space, making the interaction feel more like constructing rather
             than triggering sounds directly.
           </p>
+          <br />
+          <button
+            class="links"
+            data-url="https://www.incredibox.com/demo/"
+            style="margin-right: 10px"
+          >
+            Incredibox
+          </button>
+          <button class="links" data-url="https://seaquence.app/">
+            Patatap
+          </button>
         </div>
         <div class="right">
-          <img
-            src="images/vetvisst-bricks-6909999.jpg"
-            alt="code-1"
-            style="width: 750px"
-          />
+          <img src="images/Inspiration.png" alt="code-1" style="width: 750px" />
         </div>
       </div>
 
@@ -213,6 +218,9 @@
             and pitch variation.  actions.
           </p>
         </div>
+      </div>
+      <br />
+      <div class="sidebyside2">
         <div class="background" id="background2">
           <h3>3.Feedback System</h3>
           <p>
@@ -228,7 +236,6 @@
           </p>
         </div>
       </div>
-
       <p>
         This structured approach allowed each system to be developed
         independently before being integrated into a cohesive interactive
@@ -240,7 +247,7 @@
       <!------------------------------------------------------------------->
 
       <section class="backgroundcolour">
-        <h2>Drag & Drop System</h2>
+        <h2 style="font-size: 70px" id="drag&DropSystem">Drag & Drop System</h2>
         <p>
           This interaction was one of the most complex parts of the project, as
           it required multiple systems to work together seamlessly. To manage
@@ -274,7 +281,7 @@
 
         <button
           class="links"
-          data-url="https://www.patatap.com/"
+          data-url="https://www.w3schools.com/html/html5_draganddrop.asp"
           style="margin-top: 10px"
         >
           link to W3
@@ -290,17 +297,11 @@
               data-col) to store each square’s coordinates. This allowed
               JavaScript to easily track and interact with each cell based on
               its position.
-              <br /><br />
-              This system became essential for handling placement logic. When a
-              shape is dropped, the program calculates its position relative to
-              the grid and determines which cells it should occupy. Using these
-              coordinates, the system checks for boundaries and prevents
-              overlaps by marking occupied cells accordingly.
             </p>
           </div>
           <div class="right">
             <img
-              src="images/vetvisst-bricks-6909999.jpg"
+              src="images/Grid Containter.png"
               alt="code-1"
               style="width: 750px"
             />
@@ -312,26 +313,45 @@
         <div class="sidebyside">
           <div class="left">
             <img
-              src="images/vetvisst-bricks-6909999.jpg"
+              src="images/Dropping System.png"
               alt="code-1"
               style="width: 750px"
             />
           </div>
           <div class="right">
             <p style="margin-right: -1px">
+              This system became essential for handling placement logic. When a
+              shape is dropped, the program calculates its position relative to
+              the grid and determines which cells it should occupy. Using these
+              coordinates, the system checks for boundaries and prevents
+              overlaps by marking occupied cells accordingly.
+              <br /><br />
+
               Snapping the shapes accurately to the grid was one of the more
               challenging aspects. I had to account for the size of each shape
               and where the user was grabbing it from, ensuring that placement
               felt natural rather than jumping unpredictably. Once placed, CSS
               was used to visually align the shapes within the grid.
+            </p>
+          </div>
+        </div>
 
-              <br /><br />
-
+        <br /><br />
+        <div class="sidebyside">
+          <div class="left">
+            <p style="margin-left: -1px">
               To improve flexibility, I implemented a system that updates
               occupied cells whenever a shape is moved. This allows users to
               reposition shapes freely, including dragging them back into the
               container, making the interaction feel more fluid and responsive.
             </p>
+          </div>
+          <div class="right">
+            <img
+              src="images/Screenshot 2026-04-22 at 6.55.26 PM.png"
+              alt="code-1"
+              style="width: 750px"
+            />
           </div>
         </div>
 
@@ -352,20 +372,28 @@
           <div class="left">
             <p style="margin-left: -1px">
               I wanted each interaction to feel unique, so no two compositions
-              would produce the same outcome. Inspired by the open-ended nature
-              of wooden blocks, the system encourages experimentation and
-              replayability.
+              would produce the same outcome. Inspired by the open ended nature
+              of wooden blocks, where you can build freely and then throw
+              everything back into the container when you are done, the system
+              encourages experimentation and replayability rather than a fixed
+              result.
+
               <br /><br />
+
               To achieve this, each shape is cloned dynamically and assigned
               randomised properties, including colour, position, and initial
-              rotation. This ensures that every session begins with a slightly
-              different layout, contributing to a more playful and engaging
-              experience.
+              rotation. When shapes are returned to the container, they also
+              reset into new random orientations, mimicking how real blocks
+              would naturally fall into different positions when placed back.
+              This ensures that every session begins with a slightly different
+              layout, making the interaction feel more playful, less
+              predictable, and encouraging users to continuously rebuild and
+              explore.
             </p>
           </div>
           <div class="right">
             <img
-              src="images/vetvisst-bricks-6909999.jpg"
+              src="images/jason-sung-0rPp7mDrmwQ-unsplash.jpg"
               alt="code-1"
               style="width: 750px"
             />
@@ -375,7 +403,9 @@
         <!------------------------------------------------------------------->
         <!-- Interaction Refinement  --------------------------------------------------->
         <!------------------------------------------------------------------->
-        <h2>Interaction Refinement</h2>
+        <h2 style="font-size: 70px" id="interactionRefinement">
+          Interaction Refinement
+        </h2>
         <p>
           One improvement I introduced was allowing users to return shapes back
           to the container after placing them on the grid. This gave users more
@@ -386,10 +416,10 @@
         </p>
         <img src="images/incredibox.png" alt="" />
 
-        <div class="sidebyside" style="margin-top: 100px">
+        <div class="sidebyside">
           <div class="left">
             <img
-              src="images/trune-blocks-9395299_1920.jpg"
+              src="images/Screenshot 2026-04-22 at 7.09.09 PM.png"
               alt="code-1"
               style="height: 400px"
             />
@@ -411,6 +441,7 @@
             </p>
           </div>
         </div>
+        <br /><br />
 
         <div class="sidebyside">
           <div class="left">
@@ -418,7 +449,7 @@
               After multiple iterations, I used AI to help identify the issue,
               which was related to how the SVG viewBox and dimensions were being
               handled. Rather than continuing with an increasingly complex
-              solution, I decided to take a more stable and controlled approach.
+              solution, I decided to try another approach.
               <br /><br />
               I resolved this by creating alternative SVG states for each
               rotation and swapping between them. This allowed me to maintain
@@ -432,11 +463,7 @@
             </p>
           </div>
           <div class="right">
-            <img
-              src="images/vetvisst-bricks-6909999.jpg"
-              alt="code-1"
-              style="width: 750px"
-            />
+            <img src="images/Rotation.png" alt="code-1" style="width: 750px" />
           </div>
         </div>
       </section>
@@ -445,11 +472,11 @@
       <!-- Sound System---------------------------------------------->
       <!------------------------------------------------------------------->
 
-      <h2>Sound System</h2>
+      <h2 style="font-size: 70px" id="soundSystem">Sound System</h2>
       <div class="sidebyside">
         <div class="left">
           <img
-            src="images/vetvisst-bricks-6909999.jpg"
+            src="images/Screenshot 2026-04-22 at 8.28.26 PM.png"
             alt="code-1"
             style="width: 750px"
           />
@@ -469,11 +496,6 @@
             the shape within the grid, where higher placements produce higher
             notes and lower placements generate deeper tones. This creates a
             more structured and musical system.
-            <br /><br />
-            To further reinforce interaction, sound is triggered immediately
-            when a shape is placed onto the grid, providing instant feedback and
-            strengthening the connection between user action and system
-            response.
           </p>
         </div>
       </div>
@@ -483,6 +505,12 @@
       <div class="sidebyside">
         <div class="left">
           <p style="margin-left: -1px">
+            To further reinforce interaction, sound is triggered immediately
+            when a shape is placed onto the grid, providing instant feedback and
+            strengthening the connection between user action and system
+            response.
+            <br /><br />
+
             When the loop is activated, the system iterates through each column
             of the grid, checking for occupied cells and triggering the
             corresponding sounds in sequence. This creates a continuous playback
@@ -496,7 +524,7 @@
         </div>
         <div class="right">
           <img
-            src="images/vetvisst-bricks-6909999.jpg"
+            src="images/Sound System.png"
             alt="code-1"
             style="width: 750px"
           />
@@ -507,7 +535,7 @@
       <!-- Feedback System ---------------------------------------------->
       <!------------------------------------------------------------------->
 
-      <h2>Feedback System </h2>
+      <h2 style="font-size: 70px" id="feedbackSystem">Feedback System </h2>
       <p>
         The feedback system was designed to provide real-time visual and audio
         responses to user actions, reinforcing the interaction and improving
@@ -517,12 +545,13 @@
         understandable.
       </p>
       <br /><br />
+
       <div class="sidebyside">
         <div class="left">
           <img
-            src="images/vetvisst-bricks-6909999.jpg"
+            src="images/Screenshot 2026-04-22 at 8.35.17 PM.png"
             alt="code-1"
-            style="width: 750px"
+            style="width: 1000px"
           />
         </div>
         <div class="right">
@@ -537,25 +566,12 @@
         </div>
       </div>
 
-      <br /><br />
-
-      <div class="sidebyside">
-        <div class="left">
-          <p style="margin-left: -1px">
-            Immediate feedback is also provided when shapes are placed, through
-            both sound and visual updates. This allows users to instantly see
-            and hear the result of their actions, strengthening the connection
-            between input and outcome.
-          </p>
-        </div>
-        <div class="right">
-          <img
-            src="images/vetvisst-bricks-6909999.jpg"
-            alt="code-1"
-            style="width: 750px"
-          />
-        </div>
-      </div>
+      <p>
+        Immediate feedback is also provided when shapes are placed, through both
+        sound and visual updates. This allows users to instantly see and hear
+        the result of their actions, strengthening the connection between input
+        and outcome.
+      </p>
 
       <!------------------------------------------------------------------->
       <!-- Control Panel ---------------------------------------------->
@@ -563,15 +579,8 @@
 
       <div class="sidebyside" style="margin-top: 100px">
         <div class="left">
-          <img
-            src="images/trune-blocks-9395299_1920.jpg"
-            alt="code-1"
-            style="height: 400px"
-          />
-        </div>
-        <div class="right">
-          <h2>Control Panel</h2>
-          <p style="margin-right: -1px">
+          <h2 style="font-size: 70px" id="controlPanel">Control Panel</h2>
+          <p style="margin-left: -1px">
             The control panel allows users to manage playback and interact with
             the system more flexibly. This includes starting and stopping the
             loop, as well as adjusting the tempo through a BPM slider.
@@ -582,6 +591,9 @@
             compositions and explore variations of the same arrangement.
           </p>
         </div>
+        <div class="right">
+          <img src="images/BPM.png" alt="code-1" style="height: 400px" />
+        </div>
       </div>
 
       <!------------------------------------------------------------------->
@@ -590,49 +602,36 @@
       <h1 id="peerUserTesting">Peer User Testing</h1>
 
       <!------------------------------------------------------------------->
-      <!-- Peer User Testing --------------------------------------------------->
+      <!-- Reflection --------------------------------------------------->
       <!------------------------------------------------------------------->
       <h1 id="reflection">Reflection</h1>
+
+      <div class="sidebyside" style="margin-top: -100px">
+        <div class="left">
+          <p style="margin-left: -1px">
+            Based on this project, I am proud of what I have achieved within the
+            three-week timeframe. I was able to develop a semi-functional
+            website that successfully demonstrates the core interaction. While
+            there is still room for further development, achieving the
+            fundamental system was a significant milestone. In particular, I was
+            able to apply the interaction design principles of mapping and
+            feedback, ensuring that visual placement directly influences sound
+            output, and that users receive immediate audio and visual responses
+            to their actions.
+          </p>
+        </div>
+        <div class="right">
+          <img src="images/webpage.png" alt="code-1" style="width: 1000px" />
+        </div>
+      </div>
+
       <p>
-        Based on this project, I am proud of what I have achieved within the
-        three-week timeframe. I was able to develop a semi-functional website
-        that successfully demonstrates the core interaction. While there is
-        still room for further development, achieving the fundamental system was
-        a significant milestone. In particular, I was able to apply the
-        interaction design principles of mapping and feedback, ensuring that
-        visual placement directly influences sound output, and that users
-        receive immediate audio and visual responses to their actions.
+        Overall, this project has helped me develop a stronger understanding of
+        how interaction design, technical implementation, and user experience
+        are interconnected. Moving forward, I would focus on improving
+        usability, expanding system complexity, and refining the overall
+        experience to create a more polished and engaging interactive tool.
       </p>
-
-      <img
-        src="images/Screenshot 2026-03-17 at 5.46.13 PM.png"
-        alt=""
-        style="height: 100px"
-      />
-      Another strength of my process was my ability to adapt and find
-      alternative solutions when faced with challenges. For example, I
-      encountered difficulties when implementing the rotation feature, which
-      initially led to technical issues with SVG scaling. Instead of becoming
-      overly focused on a single solution, I was able to pivot and explore a
-      different approach. This allowed me to continue progressing with the
-      project while still achieving a functional outcome. This experience
-      highlighted the importance of flexibility in problem-solving, particularly
-      when working with complex interactive systems.
-      <br /><br />
-
-      One area I could improve on is the range of sounds. While the sound system
-      effectively demonstrates the relationship between visual placement and
-      audio output, it is still limited in variety. Expanding the range of
-      sounds and refining the mapping system could enhance the depth of
-      interaction and encourage more experimentation.
-      <br /><br />
-
-      Overall, this project has helped me develop a stronger understanding of
-      how interaction design, technical implementation, and user experience are
-      interconnected. Moving forward, I would focus on improving usability,
-      expanding system complexity, and refining the overall experience to create
-      a more polished and engaging interactive tool.
-
       <!------------------------------------------------------------------->
       <!-- Worth --------------------------------------------------->
       <!------------------------------------------------------------------->
