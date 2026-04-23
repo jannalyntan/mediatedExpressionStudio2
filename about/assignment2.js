@@ -87,5 +87,9 @@ rainbowText("soundSystem");
 rainbowText("feedbackSystem");
 rainbowText("controlPanel");
 rainbowText("peerUserTesting");
+rainbowText("timeline");
+rainbowText("improvement");
+rainbowText("movingForward");
+
 rainbowText("reflection");
 
