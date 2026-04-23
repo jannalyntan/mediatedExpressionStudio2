@@ -318,7 +318,7 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  gap: 60px;
+  gap: 140px;
   color: white;
   margin-left: -25px;
 }
@@ -336,20 +336,19 @@ a {
 a:hover {
   text-decoration: none;
   scale: 1.25;
-  background-color: #5359231a;
-  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .weeks {
-  width: 140px;
+  width: 200px;
 }
 
-#week2 {
-  margin-left: -30px;
+#week7 {
+  margin-left: -50px;
 }
 
-#week4 {
-  margin-left: -10px;
+#week11 {
+  margin-right: -50px;
 }
 
 .timeline {
@@ -364,13 +363,13 @@ a:hover {
   content: "";
   position: absolute;
   width: 6px;
-  background-color: #535923;
+  background-color: var(--faint);
   top: 0;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   margin-top: 71px;
-  margin-bottom: 390px;
+  margin-bottom: 300px;
 }
 
 .timeline-item {
@@ -391,7 +390,7 @@ a:hover {
 }
 
 .timeline-item .content {
-  background-color: #5359231a;
+  background-color: var(--faint);
   padding: 30px;
   border-radius: 15px;
   position: relative;
@@ -404,7 +403,7 @@ a:hover {
   height: 20px;
   right: -14px;
   background-color: white;
-  border: 4px solid #535923;
+  border: 4px solid var(--blue);
   top: 20px;
   border-radius: 50%;
   z-index: 1;
@@ -415,8 +414,6 @@ a:hover {
 }
 
 .timeline-item h2 {
-  color: #535923;
-  font-family: "Bodoni Moda", serif;
   margin-bottom: 10px;
 }
 

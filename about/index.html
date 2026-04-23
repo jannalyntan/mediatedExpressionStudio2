@@ -50,7 +50,6 @@
           >
             Peer User Testing
           </button>
-
           <button class="project" id="reflectionBtn" data-target="reflection">
             Reflection
           </button>
@@ -58,7 +57,7 @@
           <button
             class="project"
             id="projectTimelineBtn"
-            data-target="projectTimeline"
+            data-target="timeline"
           >
             Project Timeline
           </button>
@@ -78,9 +77,9 @@
             building blocks. These toys represent an early experience of
             creativity, where users can build and imagine freely using a small
             set of simple materials. With just a few blocks, people can create
-            different structures like towers or objects, which creates a sense
-            of open-ended and limitless creativity. This idea forms the
-            foundation of my project.
+            different structures like towers or objects, creating a sense of
+            open-ended and limitless creativity. This idea forms the foundation
+            of my project.
           </p>
         </div>
         <div class="right">
@@ -94,12 +93,12 @@
 
       <br /><br /><br />
       <p>
-        To recreate this in a digital context, I developed a website that allows
-        users to build compositions using simple block-like shapes. I then
-        extended this idea by translating these visual builds into sound using
-        Tone.js. This adds another layer to the interaction, where users are not
-        only building visually, but also unintentionally creating sound patterns
-        through their placement.
+        To translate this into a digital context, I developed a website that
+        allows users to build compositions using simple block-like shapes. I
+        then extended this idea by translating these visual builds into sound
+        using Tone.js. This adds another layer to the interaction, where users
+        are not only building visually, but also unintentionally creating sound
+        patterns through their placement.
       </p>
 
       <div class="sidebyside">
@@ -113,7 +112,8 @@
             with sound. Instead of using common inputs like typing or clicking
             to generate audio, the system uses the position, colour, and
             arrangement of blocks to influence the sound output. This turns a
-            simple building interaction into a playful way of creating music.
+            simple building interaction into a more playful way of creating
+            music.
           </p>
         </div>
       </div>
@@ -123,11 +123,11 @@
       <div class="sidebyside">
         <div class="left">
           <p style="margin-left: -1px">
-            This idea was influenced by projects explored in Assignment 1, such
-            as Patatap and Incredibox, which map simple inputs to sound.
-            However, my project focuses more on building and arranging objects
-            in space, making the interaction feel more like constructing rather
-            than triggering sounds directly.
+            This idea was influenced by Incredibox, a project explored in
+            Assignment 1, which map simple inputs to sound. However, my project
+            focuses more on building and arranging objects in space, making the
+            interaction feel more like constructing rather than directly
+            triggering sounds.
           </p>
           <br />
           <button
@@ -137,21 +137,15 @@
           >
             Incredibox
           </button>
-          <button class="links" data-url="https://seaquence.app/">
-            Patatap
-          </button>
         </div>
         <div class="right">
-          <img src="images/Inspiration.png" alt="code-1" style="width: 750px" />
+          <img src="images/incredibox.png" alt="code-1" style="width: 750px" />
         </div>
       </div>
 
       <br /><br />
 
-      <p>
-        The design is guided by the interaction design principles of mapping and
-        feedback.
-      </p>
+      <p>The design is guided by the interaction design principles of:</p>
 
       <!-- Since there was 2 points decided to use a flex box to better showcase this information. -->
 
@@ -193,11 +187,11 @@
         For this project, I used HTML, CSS, and JavaScript to build the core
         functionality of the website, with Tone.js integrated to translate
         visual interactions into sound. This allowed me to explore how user
-        input could simultaneously influence both visual and audio outputs. To
+        input could influence both visual and audio outputs at the same time. To
         manage the complexity of the system, I approached development in stages,
-        starting with the foundational structure of the grid and interaction
-        logic, before layering in more advanced features such as sound mapping,
-        looping, and user controls.
+        starting with the basic grid and interaction logic, before layering in
+        more advanced features such as sound mapping, looping, and user
+        controls.
       </p>
 
       <p>The system consists of four core interactions:</p>
@@ -215,7 +209,7 @@
           <h3>2.Sound System</h3>
           <p>
             Translates visual placement into sound through colour-based mapping
-            and pitch variation.  actions.
+            and pitch variation
           </p>
         </div>
       </div>
@@ -224,8 +218,8 @@
         <div class="background" id="background2">
           <h3>3.Feedback System</h3>
           <p>
-            Provides real-time visual and audio responses, particularly through
-            the looping sequence.
+            Provides real-time visual and audio responses, especially through
+            the looping system
           </p>
         </div>
         <div class="background" id="background2">
@@ -237,9 +231,8 @@
         </div>
       </div>
       <p>
-        This structured approach allowed each system to be developed
-        independently before being integrated into a cohesive interactive
-        experience.
+        This structured approach allowed the project to be broken down into
+        smaller parts, making it more manageable and easier to tackle.
       </p>
 
       <!------------------------------------------------------------------->
@@ -249,9 +242,10 @@
       <section class="backgroundcolour">
         <h2 style="font-size: 70px" id="drag&DropSystem">Drag & Drop System</h2>
         <p>
-          This interaction was one of the most complex parts of the project, as
-          it required multiple systems to work together seamlessly. To manage
-          this, I broke the process down into three key stages:
+          This interaction was one of the most complex and the biggest part of
+          the project, as it required multiple systems to work together
+          seamlessly. <br />To manage this, I broke the process down into three
+          key stages:
         </p>
 
         <div class="sidebyside2">
@@ -326,7 +320,6 @@
               coordinates, the system checks for boundaries and prevents
               overlaps by marking occupied cells accordingly.
               <br /><br />
-
               Snapping the shapes accurately to the grid was one of the more
               challenging aspects. I had to account for the size of each shape
               and where the user was grabbing it from, ensuring that placement
@@ -362,33 +355,30 @@
         <h2>Shape Clone System</h2>
 
         <p>
-          Since the interaction required multiple different clones of the same
-          shapes, similar to a set of wooden blocks, I implemented cloning
+          Since the interaction required multiple instances of the same shapes,
+          similar to a set of wooden blocks, I chose to implement cloning
           through JavaScript rather than duplicating elements in HTML. This
-          allowed for greater flexibility and dynamic generation.
+          approach allowed for greater flexibility, enabling shapes to be
+          generated dynamically and adapted within the interaction.
         </p>
         <br /><br />
         <div class="sidebyside">
           <div class="left">
             <p style="margin-left: -1px">
               I wanted each interaction to feel unique, so no two compositions
-              would produce the same outcome. Inspired by the open ended nature
-              of wooden blocks, where you can build freely and then throw
-              everything back into the container when you are done, the system
-              encourages experimentation and replayability rather than a fixed
-              result.
-
+              would produce the same outcome. Inspired by the open-ended nature
+              of wooden blocks, where users can build and then reset by placing
+              everything back, the system encourages experimentation and
+              replayability.
               <br /><br />
-
               To achieve this, each shape is cloned dynamically and assigned
               randomised properties, including colour, position, and initial
               rotation. When shapes are returned to the container, they also
               reset into new random orientations, mimicking how real blocks
-              would naturally fall into different positions when placed back.
+              would naturally fall into different positions while packing up.
               This ensures that every session begins with a slightly different
-              layout, making the interaction feel more playful, less
-              predictable, and encouraging users to continuously rebuild and
-              explore.
+              layout, making the interaction feel more playful and less
+              predictable.
             </p>
           </div>
           <div class="right">
@@ -411,10 +401,9 @@
           to the container after placing them on the grid. This gave users more
           flexibility to adjust or undo their compositions, rather than being
           locked into their initial placement. Although this was a small
-          addition, it helped improve the overall usability and made the
-          interaction feel more forgiving and user-friendly.
+          addition, it improved usability and made the interaction feel more
+          forgiving.
         </p>
-        <img src="images/incredibox.png" alt="" />
 
         <div class="sidebyside">
           <div class="left">
@@ -436,8 +425,7 @@
               Initially, I attempted to rotate the shapes using CSS transforms.
               While this visually rotated the element, it caused issues with
               maintaining consistent sizing and alignment. In particular, the
-              SVGs would sometimes distort or scale incorrectly, making the
-              interaction feel unreliable.
+              SVGs would sometimes distort or scale incorrectly.
             </p>
           </div>
         </div>
@@ -448,16 +436,22 @@
             <p style="margin-left: -1px">
               After multiple iterations, I used AI to help identify the issue,
               which was related to how the SVG viewBox and dimensions were being
-              handled. Rather than continuing with an increasingly complex
-              solution, I decided to try another approach.
+              handled. Every time the shape was placed into the grid, the SVG
+              would distort, creating a visible glitch. Rather than continuing
+              with an increasingly complex solution, I decided to take a more
+              stable and controlled approach.
+
               <br /><br />
+
               I resolved this by creating alternative SVG states for each
               rotation and swapping between them. This allowed me to maintain
               consistent proportions and avoid distortion, while still achieving
               the intended rotation effect. It also required recalculating each
               shape’s width and height in relation to the grid, as well as
               updating how it occupies cells after rotation.
+
               <br /><br />
+
               Overall, this decision prioritised reliability and consistency,
               resulting in a smoother and more intuitive user experience.
             </p>
@@ -505,21 +499,20 @@
       <div class="sidebyside">
         <div class="left">
           <p style="margin-left: -1px">
-            To further reinforce interaction, sound is triggered immediately
-            when a shape is placed onto the grid, providing instant feedback and
+            To reinforce this interaction, sound is triggered immediately when a
+            shape is placed onto the grid, providing
+            <span style="font-weight: bold">instant feedback</span> and
             strengthening the connection between user action and system
-            response.
-            <br /><br />
-
+            response. <br /><br />
             When the loop is activated, the system iterates through each column
             of the grid, checking for occupied cells and triggering the
             corresponding sounds in sequence. This creates a continuous playback
             of the user’s composition, transforming static placement into a
             dynamic audio experience.
             <br /><br />
-            Overall, this system encourages experimentation and exploration,
-            while maintaining a clear and intuitive relationship between visual
-            input and audio output.
+            Overall, this system encourages experimentation and exploration
+            while maintaining a clear relationship between visual input and
+            audio output.
           </p>
         </div>
         <div class="right">
@@ -540,8 +533,8 @@
         The feedback system was designed to provide real-time visual and audio
         responses to user actions, reinforcing the interaction and improving
         usability. This follows the interaction design principle of
-        <span style="font-weight: bold">feedback</span> , where the system
-        continuously responds to user input to make the interaction more
+        <span style="font-weight: bold">feedback</span>, where the system
+        continuously responds to user input to make interactions more
         understandable.
       </p>
       <br /><br />
@@ -568,8 +561,8 @@
 
       <p>
         Immediate feedback is also provided when shapes are placed, through both
-        sound and visual updates. This allows users to instantly see and hear
-        the result of their actions, strengthening the connection between input
+        sound and visual updates. This ensures users can clearly see and hear
+        the results of their actions, strengthening the connection between input
         and outcome.
       </p>
 
@@ -625,12 +618,10 @@
         </div>
         <div class="right">
           <p style="margin-right: -1px">
-            Overall, the feedback was largely positive, with most users
-            describing the experience as fun and engaging. A common pattern
-            observed was that users immediately attempted to drag shapes onto
-            the grid, indicating that the core interaction was intuitive and did
-            not require instructions. This suggests that the visual design
-            successfully guided initial user behaviour.
+            Overall, the feedback was quite positive, with most users describing
+            the experience as fun and engaging. Most users immediately tried
+            dragging shapes onto the grid, which shows that the main interaction
+            was intuitive and easy to understand without needing instructions.
           </p>
         </div>
       </div>
@@ -640,12 +631,11 @@
         <div class="sidebyside">
           <div class="left">
             <p style="margin-left: -1px">
-              A key strength identified was the combination of sound and visual
-              feedback. Many users noted that the sound made the interaction
-              more engaging and helped them understand what was happening. Some
-              described the experience as playful and immersive, which aligns
-              with the project’s intention of recreating a childlike,
-              exploratory interaction.
+              One of the main strengths was the sound and visual feedback. Many
+              users mentioned that the sound made the experience more engaging
+              and helped them understand what was happening. Some also described
+              the interaction as playful and immersive, which aligns with my
+              intention of recreating a childhood play experience.
             </p>
           </div>
           <div class="right">
@@ -669,27 +659,23 @@
         </div>
         <div class="right">
           <p style="margin-right: -1px">
-            However, several common issues emerged. The most significant was the
-            discoverability of the rotation feature, with many users unaware
-            that shapes could be rotated unless they accidentally discovered it
-            or were prompted. This highlights a lack of clear affordances,
-            suggesting that the interaction would benefit from stronger visual
-            cues or guidance.
+            However, there were also some clear areas for improvement. A common
+            issue was the discoverability of the rotation feature, as many users
+            did not realise that shapes could be rotated unless they were told
+            or discovered it later. This shows that the interaction is not very
+            obvious and would benefit from clearer visual cues or hints.
             <br /><br />
-
-            Another recurring theme was the clarity of mapping between visuals
-            and sound. Some users expected additional relationships, such as
-            shape size or rotation influencing sound output. When these
-            expectations were not met, it created confusion. This indicates that
-            either the mapping system needs to be expanded or more clearly
-            communicated to users.
+            Another issue was the connection between visuals and sound. Some
+            users expected things like shape size or rotation to affect the
+            sound, but that was not always the case. This created some
+            confusion, suggesting that the mapping could either be clearer or
+            further developed.
             <br /><br />
-
-            There were also usability concerns, particularly related to layout
-            and responsiveness. Some users experienced issues such as the grid
-            being cut off on different screen sizes and occasional
-            inconsistencies when dragging shapes. These issues point to the need
-            for improved responsive design and more stable interaction handling.
+            There were also some layout and usability issues, such as the grid
+            being cut off on certain screen sizes and dragging not always
+            feeling smooth. These affected the overall experience and showed
+            that the system still needs improvement in terms of responsiveness
+            and interaction stability.
           </p>
         </div>
       </div>
@@ -698,20 +684,16 @@
         <div class="sidebyside">
           <div class="left">
             <p style="margin-left: -1px">
-              In terms of suggestions, users commonly recommended increasing
-              sound variation, introducing more shapes, and adding additional
-              controls such as sliders to give users more control over their
-              compositions. There were also suggestions to improve visual design
-              and make interactions like rotation more obvious.
+              In terms of suggestions, many users recommended adding more sound
+              variation, more shapes, and more control over the sound, such as
+              sliders. Others also mentioned making interactions like rotation
+              more obvious and improving the overall visual design.
               <br /><br />
-
-              Based on these insights, my next steps would be to improve
-              interaction clarity, particularly for less obvious features such
-              as rotation, refine the mapping system to better align with user
-              expectations, and expand the range of sounds and controls.
-              Addressing layout and responsiveness issues would also be a
-              priority to ensure a more consistent user experience across
-              devices.
+              Based on this feedback, I would focus on improving interaction
+              clarity, especially for rotation, refining how sound is mapped to
+              visual elements, and expanding the range of sounds and controls.
+              These improvements would make the system easier to understand
+              while also making it more engaging to explore.
             </p>
           </div>
           <div class="right">
@@ -723,223 +705,6 @@
           </div>
         </div>
       </section>
-
-      <!------------------------------------------------------------------->
-      <!-- Timeline --------------------------------------------------->
-      <!------------------------------------------------------------------->
-      <h1 id="timeline">Timeline</h1>
-
-      <p>
-        Based on this project, I am proud of what I have achieved within the
-        three-week timeframe. I was able to develop a semi-functional website
-        that successfully demonstrates the core interaction. While there is
-        still room for further development, achieving the fundamental system was
-        a significant milestone. In particular, I was able to apply the
-        interaction design principles of mapping and feedback, ensuring that
-        visual placement directly influences sound output, and that users
-        receive immediate audio and visual responses to their actions.
-      </p>
-
-      <!------------------------------------------------------------------->
-      <!-- Timeline-------------------------------------------------->
-      <!------------------------------------------------------------------->
-
-      <h1 id="timelineCon">Timeline</h1>
-
-      <p>
-        This project was completed over the span of eight weeks, moving through
-        several key stages:
-      </p>
-      <section>
-        <img src="images/Timeline.png" alt="code-1" style="width: 1450px" />
-        <div class="timeline-container">
-          <a href="#week1content" id="week1">
-            <h2>Week 1</h2>
-            <p>Planning & Conceptualisation</p>
-          </a>
-          <a href="#week2content" class="weeks" id="week2">
-            <h2>Week 2</h2>
-            <p>Start of Coding</p>
-          </a>
-          <a href="#week3content" class="weeks" id="week3">
-            <h2>Week 3</h2>
-            <p>Sound & Style</p>
-          </a>
-          <a href="#week4content" class="weeks" id="week4">
-            <h2>Week 4</h2>
-            <p>User Testing</p>
-          </a>
-          <a href="#week5content" class="weeks" id="week5">
-            <h2>Week 5</h2>
-            <p>Improvements</p>
-          </a>
-          <a href="#week5content" class="weeks" id="week6">
-            <h2>Week 6</h2>
-            <p>Improvements</p>
-          </a>
-          <a href="#week5content" class="weeks" id="week7">
-            <h2>Week 7</h2>
-            <p>Improvements</p>
-          </a>
-          <a href="#week8content" class="weeks" id="week8">
-            <h2>Week 8</h2>
-            <p>Finalisation</p>
-          </a>
-        </div>
-      </section>
-
-      <section class="timeline">
-        <div class="timeline-item left" id="week1content">
-          <div class="content">
-            <h2>Planning & Conceptualisation <span>(Week 1)</span></h2>
-            <p>
-              The idea came to me quite organically, after a bit of
-              doomscrolling, I remember a TikTok trend where users turned their
-              names into audio pieces. That was when I found myself wondering,
-              “What would my name sound like?” which then expanded into, “Could
-              you create music through words?” This curiosity became the
-              foundation of the project.
-            </p>
-            <a
-              href="https://www.tiktok.com/@ben_makes_names_to_music/video/6945646958623132933?is_from_webapp=1&sender_device=pc"
-              target="_blank"
-            >
-              <button>link to tiktok.</button>
-            </a>
-            <p>
-              During this stage, I sketched a rough structure of the website and
-              started thinking about how the interactions would work, especially
-              how I could use &lt;math.random&gt; to generate interesting
-              outputs. This phase was quite fluid and imaginative, but it also
-              helped set a clear direction in terms of concept for the following
-              weeks.
-            </p>
-
-            <img src="images/Layout-1.png" alt="code-1" style="width: 440px" />
-          </div>
-        </div>
-
-        <div class="timeline-item right">
-          <div class="content" id="week2content">
-            <h2>Start of Coding <span>(Week 1–3)</span></h2>
-            <p>
-              This phase ended up taking much longer than I expected. Turning
-              the concept into a playable prototype required figuring out how to
-              make every letter, number, and symbol trigger a sound using
-              Tone.js. I started by getting the text box interaction to work,
-              allowing users to type and immediately hear their “composition".
-            </p>
-            <p>
-              Next, I implemented the core buttons and their functionalities:
-            </p>
-            <ul style="margin-top: -20px">
-              <li>
-                <h3>Generate</h3>
-                <p style="margin-left: -0px; margin-top: -20px">
-                  Using &lt;math.random&gt; to suggest random words.
-                </p>
-              </li>
-              <li>
-                <h3>Play</h3>
-                <p style="margin-left: -0px; margin-top: -20px">
-                  To string the inputs together into a single sound piece.
-                </p>
-              </li>
-              <li>
-                <h3>Reset</h3>
-                <p style="margin-left: -0px; margin-top: -20px">
-                  To give users a fresh canvas.
-                </p>
-              </li>
-            </ul>
-            <p>
-              Once these core functions worked, I added a karaoke-like text
-              highlighting feature so users could follow along during playback.
-              This feature was technically challenging and took more time than
-              planned.
-            </p>
-
-            <img
-              src="images/highlight-feature.png"
-              alt="code-1"
-              style="width: 440px"
-            />
-          </div>
-        </div>
-
-        <div class="timeline-item left">
-          <div class="content" id="week3content">
-            <h2>Sound & Style <span>(Week 3)</span></h2>
-            <p>
-              At this stage, I realised that my initial visual style didn’t
-              match the audio experience. The sounds had a calming,
-              windchime-like quality, but the interface looked too plain and
-              disconnected. I went back to the drawing board and decided to lean
-              into a zen and calming aesthetic.
-            </p>
-            <img
-              src="images/reference-2.png"
-              alt="code-1"
-              style="width: 440px"
-            />
-            <p class="subtext">Images taken from Pinterest</p>
-            <p>
-              Rather than changing the entire structure, I refined the colour
-              palette to use greens, added textures, and made subtle adjustments
-              that gave the interface more warmth and cohesion. This was a
-              turning point, the experience started to feel more immersive and
-              unified once the visuals and sounds aligned.
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline-item right">
-          <div class="content" id="week4content">
-            <h2>User Testing <span>(Week 4)</span></h2>
-            <p>
-              User testing played a big role in refining the project. I focused
-              on whether users felt the style matched the sound and interaction,
-              and I received valuable feedback. This stage validated some of my
-              decisions but also pointed out areas, like button visibility and
-              placeholder text, that needed improvement.
-            </p>
-            <p>
-              It was also a good reminder of how users interpret interfaces
-              differently from how I imagined them as a designer. This feedback
-              loop was crucial in shaping the final version.
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline-item left">
-          <div class="content" id="week5content">
-            <h2>Improvements <span>(Week 5–7)</span></h2>
-            <p>
-              In the final stage, I focused on refining interactions, making the
-              buttons more identifiable, adding ripple animations during
-              playback, and polishing smaller UI elements. This is all mention
-              earlier.
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline-item right">
-          <div class="content" id="week8content">
-            <h2>Finalisation <span>(Week 8)</span></h2>
-            <p>
-              Looking back, the timeline overall loosely followed my initial
-              plan, but there were several points, especially during coding and
-              animation, where I underestimated the time needed. These
-              challenges taught me a lot about scoping self-directed projects.
-            </p>
-            <p>
-              I learned that while the concept phase can feel fast and exciting,
-              implementation almost always takes longer, and leaving buffer time
-              for unexpected technical hurdles is essential.
-            </p>
-          </div>
-        </div>
-      </section>
       <!------------------------------------------------------------------->
       <!-- Reflection --------------------------------------------------->
       <!------------------------------------------------------------------->
@@ -948,8 +713,8 @@
       <div class="sidebyside" style="margin-top: -100px">
         <div class="left">
           <p style="margin-left: -1px">
-            Based on this project, I am proud of what I have achieved within the
-            three-week timeframe. I was able to develop a semi-functional
+            Based on this prototype, I am proud of what I have achieved within
+            the three-week timeframe. I was able to develop a semi-functional
             website that successfully demonstrates the core interaction. While
             there is still room for further development, achieving the
             fundamental system was a significant milestone. In particular, I was
@@ -964,13 +729,227 @@
         </div>
       </div>
 
+      <div class="sidebyside">
+        <div class="left">
+          <img
+            src="images/yassine-ait-tahit-uBqd-tGQI8o-unsplash.jpg"
+            alt=""
+            style="width: 700px"
+          />
+        </div>
+        <div class="right">
+          <p style="margin-right: -1px">
+            One of the main strengths of this project is how the visual
+            interaction connects with the sound. Users are able to build
+            compositions while also generating audio, which creates a more
+            engaging and playful experience that matches the concept.
+            <br /><br />
+            From a technical perspective, managing multiple systems such as the
+            grid, shape behaviour, and sound playback was quite challenging. It
+            required a lot of trial and error and problem-solving, which helped
+            me better understand how to break down complex interactions into
+            smaller parts and build them step by step.
+          </p>
+        </div>
+      </div>
+
+      <!------------------------------------------------------------------->
+      <!-- Improvements ---------------------------------------------->
+      <!------------------------------------------------------------------->
+
+      <h2 style="font-size: 70px" id="improvement">Improvements </h2>
+
+      <div class="sidebyside">
+        <div class="left">
+          <p style="margin-left: -1px">
+            Through the development process and user testing, I identified
+            several areas that needed improvement. Some interactions, such as
+            rotation, were not immediately obvious to users, highlighting the
+            need for clearer visual cues and guidance.
+            <br /><br />
+            The mapping system was also not always fully understood. While the
+            relationship between placement and sound was implemented, some users
+            expected additional elements, such as shape size or rotation, to
+            influence the sound. This showed a gap between how I designed the
+            system and how users interpreted it.
+            <br /><br />
+            These insights helped me better understand how important it is to
+            clearly communicate interactions, not just implement them.
+          </p>
+        </div>
+        <div class="right">
+          <img
+            src="images/trune-blocks-9395299_1920.jpg"
+            alt="code-1"
+            style="height: 600px"
+          />
+        </div>
+      </div>
+
+      <!------------------------------------------------------------------->
+      <!-- Improvements ---------------------------------------------->
+      <!------------------------------------------------------------------->
+
+      <h2 style="font-size: 70px" id="movingForward">Moving Forward </h2>
+
+      <div class="sidebyside">
+        <div class="left">
+          <img
+            src="images/pexels-alleksana-4271686.jpg"
+            alt=""
+            style="width: 700px"
+          />
+        </div>
+        <div class="right">
+          <p style="margin-right: -1px">
+            Moving forward, I would focus on improving interaction clarity,
+            expanding the sound variation, and refining the overall user
+            experience. One of the main priorities would be improving how users
+            understand and discover interactions within the system. For example,
+            features such as rotation would benefit from clearer visual
+            guidance, such as hover states, previews, or subtle indicators that
+            show how an action will affect the shape before it is applied. This
+            would help reduce confusion and make the interaction more intuitive.
+            <br /><br />
+            I would also work on improving responsiveness across different
+            screen sizes, as some users experienced layout issues such as the
+            grid being cut off. Ensuring that the system adapts properly to
+            different devices would create a more consistent and accessible
+            experience. In addition, refining the drag-and-drop interaction to
+            feel smoother and more precise would further improve usability.
+          </p>
+        </div>
+      </div>
+      <br /><br />
+      <div class="sidebyside">
+        <div class="left">
+          <p style="margin-left: -1px">
+            Another key area for improvement is the sound system. While the
+            current system successfully demonstrates the relationship between
+            visual placement and sound, it is still limited in variation.
+            Expanding the range of sounds and introducing more dynamic
+            behaviours would make the interaction more engaging and encourage
+            users to experiment further.
+            <br /><br />
+            I would also continue developing the mapping system to either make
+            it clearer or expand it further. This could involve strengthening
+            the connection between visual properties and sound, or introducing
+            additional mappings so that elements such as shape type or rotation
+            also influence the audio output. By doing this, users would be able
+            to better understand how their actions directly affect the sound,
+            creating a more meaningful and responsive interaction.
+          </p>
+        </div>
+        <div class="right">
+          <img
+            src="images/pawel-czerwinski-eybM9n4yrpE-unsplash.jpg"
+            alt="code-1"
+            style="height: 600px"
+          />
+        </div>
+      </div>
       <p>
-        Overall, this project has helped me develop a stronger understanding of
-        how interaction design, technical implementation, and user experience
-        are interconnected. Moving forward, I would focus on improving
-        usability, expanding system complexity, and refining the overall
-        experience to create a more polished and engaging interactive tool.
+        Overall, these improvements would aim to make the system more intuitive,
+        responsive, and engaging, while better aligning the user experience with
+        the original concept of playful and exploratory interaction.
       </p>
+
+      <!------------------------------------------------------------------->
+      <!-- Timeline-------------------------------------------------->
+      <!------------------------------------------------------------------->
+
+      <h1 id="timeline">Timeline</h1>
+
+      <p>
+        Here is the timeline of what I am going to complete in the next few
+        weeks:
+      </p>
+      <section>
+        <img src="images/Timeline.png" alt="code-1" style="width: 1450px" />
+        <div class="timeline-container">
+          <a href="#week7content" class="weeks" id="week7">
+            <h2>Week 7</h2>
+            <p>User Testing</p>
+          </a>
+          <a href="#week8content" class="weeks" id="week8">
+            <h2>Week 8</h2>
+            <p>Technnical Improvements</p>
+          </a>
+          <a href="#week9content" class="weeks" id="week9">
+            <h2>Week 9</h2>
+            <p>Sound & Styling Improvements</p>
+          </a>
+          <a href="#week10content" class="weeks" id="week10">
+            <h2>Week 10</h2>
+            <p>Refinement and Development Meeting</p>
+          </a>
+          <a href="#week11content" class="weeks" id="week11">
+            <h2>Week 11</h2>
+            <p>Final Submission</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="timeline">
+        <div class="timeline-item left" id="week7content">
+          <div class="content">
+            <h2>User Testing <span>(Week 7)</span></h2>
+            <p>
+              Conducted peer user testing to see how users interacted with the
+              website. Focused on getting feedback on usability, interaction
+              clarity, sound design, and overall experience. This helped me
+              identify key issues such as rotation not being obvious, unclear
+              sound mapping, and some layout problems.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item right">
+          <div class="content" id="week8content">
+            <h2>Technnical Improvements <span>(Week 8)</span></h2>
+            <p>
+              Work on fixing the technical issues identified during testing.
+              This includes improving grid spacing, making the layout responsive
+              across different screen sizes, and refining the drag-and-drop
+              interaction to make it smoother.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item left">
+          <div class="content" id="week9content">
+            <h2>Sound & Styling Improvements <span>(Week 9)</span></h2>
+            <p>
+              Focus on improving the sound system by refining how visuals map to
+              sound and adding more variation. At the same time, start
+              developing the visual styling to better match the playful,
+              childlike theme.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item right">
+          <div class="content" id="week10content">
+            <h2>Refinement and Development Meeting <span>(Week 10)</span></h2>
+            <p>
+              Prepare a more refined version of the prototype for the
+              development meeting. Focus on getting feedback and ensure all the
+              technical elements and styling match the interaction.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item left">
+          <div class="content" id="week11content">
+            <h2>Final Submission <span>(Week 11)</span></h2>
+            <p>
+              Finalise the project by making last adjustments to both technical
+              and visual aspects. Ensure everything is consistent and aligned
+              with the overall concept before submission.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <button id="backTopBtn" style="margin-top: 50px">back to top.</button>
 
@@ -979,16 +958,35 @@
         <div class="sidebyside">
           <button
             class="project"
-            id="projectSpeculationBtn"
-            data-target="projectSpeculation"
+            id="conceptualResponseBtn"
+            data-target="conceptualResponse"
           >
-            Introduction
+            Conceptual Response
           </button>
-          <button class="project" id="inspirationBtn" data-target="inspiration">
-            Inspiration
+          <button
+            class="project"
+            id="technicalApproachBtn"
+            data-target="technicalApproach"
+          >
+            Technical Approach
           </button>
-          <button class="project" id="interactiveBtn" data-target="interactive">
-            Interactive Experiments
+          <button
+            class="project"
+            id="peerUserTestingBtn"
+            data-target="peerUserTesting"
+          >
+            Peer User Testing
+          </button>
+          <button class="project" id="reflectionBtn" data-target="reflection">
+            Reflection
+          </button>
+
+          <button
+            class="project"
+            id="projectTimelineBtn"
+            data-target="timeline"
+          >
+            Project Timeline
           </button>
         </div>
 
