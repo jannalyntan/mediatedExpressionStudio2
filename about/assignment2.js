@@ -87,3 +87,5 @@ rainbowText("soundSystem");
 rainbowText("feedbackSystem");
 rainbowText("controlPanel");
 rainbowText("peerUserTesting");
+rainbowText("reflection");
+

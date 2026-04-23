@@ -242,14 +242,15 @@ button:hover {
 
 #background2 {
   background-color: var(--faint);
-  width: 300px;
+  width: 400px;
   height: 200px;
 }
 
 #background3 {
-  width: 350px;
-  height: 0px;
+
   background-color: white;
+    width: 400px;
+  height: 100px;
 }
 
 .colouredBg {
