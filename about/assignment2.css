@@ -247,9 +247,8 @@ button:hover {
 }
 
 #background3 {
-
   background-color: white;
-    width: 400px;
+  width: 400px;
   height: 100px;
 }
 
@@ -267,7 +266,9 @@ button:hover {
 #conceptualResponse,
 #technicalApproach,
 #reflection,
-#peerUserTesting {
+#peerUserTesting,
+#timeline,
+#reflection {
   font-size: 180px;
   color: var(--red);
 }
@@ -306,4 +307,155 @@ button:hover {
 #backToTopBtn.show {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* --------------------------------------- */
+/* Timeline--------------------------------- */
+/* --------------------------------------- */
+
+.timeline-container {
+  margin-top: -50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 60px;
+  color: white;
+  margin-left: -25px;
+}
+
+.timeline-container p {
+  margin-top: -20px;
+  color: black;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  text-decoration: none;
+  scale: 1.25;
+  background-color: #5359231a;
+  border-radius: 15px;
+}
+
+.weeks {
+  width: 140px;
+}
+
+#week2 {
+  margin-left: -30px;
+}
+
+#week4 {
+  margin-left: -10px;
+}
+
+.timeline {
+  position: relative;
+  width: 80%;
+  max-width: 1400px; /* optional */
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.timeline::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  background-color: #535923;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 71px;
+  margin-bottom: 390px;
+}
+
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 20px 40px;
+  box-sizing: border-box;
+}
+
+.timeline-item.left {
+  left: -134px;
+  text-align: right;
+}
+
+.timeline-item.right {
+  left: 49.7%;
+  text-align: left;
+}
+
+.timeline-item .content {
+  background-color: #5359231a;
+  padding: 30px;
+  border-radius: 15px;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: -14px;
+  background-color: white;
+  border: 4px solid #535923;
+  top: 20px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.timeline-item.right::before {
+  left: -10px;
+}
+
+.timeline-item h2 {
+  color: #535923;
+  font-family: "Bodoni Moda", serif;
+  margin-bottom: 10px;
+}
+
+.timeline-item h2 span {
+  font-style: italic;
+  font-size: smaller;
+}
+
+.timeline-item p,
+.timeline-item li {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  line-height: 1.2;
+  color: black;
+  text-align: left;
+}
+
+.timeline-item ul {
+  padding-left: 20px;
+  margin: 10px 0;
+  text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+  .timeline::after {
+    left: 30px;
+  }
+
+  .timeline-item {
+    width: 100%;
+    padding-left: 60px;
+    padding-right: 25px;
+  }
+
+  .timeline-item.right {
+    left: 0;
+  }
+
+  .timeline-item::before {
+    left: 18px;
+    right: auto;
+  }
 }
